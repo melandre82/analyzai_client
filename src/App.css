@@ -30,7 +30,6 @@ body {
   resize: none;
   height: max-content;
   color: white;
-  background-color: #7c7c7c;
   max-height: 70vh;
   font-size: 1rem;
   padding: 0.5rem;
@@ -77,4 +76,98 @@ form div {
 label {
   margin-top: 1rem;
   color: white;
+}
+
+/* Box.css */
+.box-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.box-content {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #40414e;
+  border-radius: 5px;
+  padding: 20px;
+  width: 80vw;
+  height: 80vh;
+  text-align: center;
+  color: white;
+  overflow-y: scroll;
+  text-align: left; /* Align text to the left */
+
+}
+
+/* FileUpload.css */
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.file-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 10px;
+  background-color: #40414e;
+  color: white;
+  max-height: 70vh;
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin: 10px 0;
+  text-align: left;
+  width: 33.33%;
+  height: 20px;
+  position: fixed;
+  top: 1vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Add overflow property */
+  text-overflow: ellipsis; /* Add text-overflow property */
+  white-space: nowrap; /* Add white-space property */
+}
+
+
+
+.file-icon {
+  margin-right: 10px;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.upload-button1 {
+  background-color: #007bff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  border: none;
+  color: #ffff;
+  max-height: 70vh;
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin: 10px 0;
+  text-align: left;
+  position: fixed;
+  top: 1vh;
+  right: 30rem;
+  font-size: 1rem;
+}
+
+.upload-button1:hover {
+  cursor: pointer;
+
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }

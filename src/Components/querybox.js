@@ -14,27 +14,6 @@ const QueryBox = () => {
 
   }
 
-  // TODO: Implement file upload and query handling logic
-
-  // return (
-  //   <div>
-  //     <form onSubmit={handleSubmit}>
-  //     <div id='textbox'>
-  //       <input
-  //         type='text'
-  //         placeholder='Enter a query'
-  //         id='query-input'
-  //         value={query}
-  //         onChange={handleQueryChange}
-  //       />
-  //       <button type='submit' id='submit-button'>
-  //         Submit
-  //       </button>
-  //     </div>
-  //     </form>
-  //   </div>
-  // )
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
