@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import '../App.css'
+import axios from 'axios'
 
 const QueryBox = () => {
   const [query, setQuery] = useState('')
@@ -10,9 +11,18 @@ const QueryBox = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log('Query:'  + query)
-
+    await axios
+      .get('http://localhost:5001/')
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+    console.log('Query:' + query)
   }
+
+
 
   return (
     <div>
@@ -32,9 +42,6 @@ const QueryBox = () => {
       </form>
     </div>
   )
-  
-
-  
 }
 
 export default QueryBox

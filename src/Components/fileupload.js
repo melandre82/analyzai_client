@@ -1,44 +1,5 @@
-// // FileUpload.js
-// import React, { useState } from 'react';
-// import '../App.css';
-
-// const FileUpload = () => {
-//   const [file, setFile] = useState(null);
-
-//   const handleFileChange = (event) => {
-//     setFile(event.target.files[0]);
-//   };
-
-//   return (
-//     <div className="upload-container">
-//       <div className="file-box">
-//         {file ? (
-//           <>
-//             <span className="file-icon">📄</span>
-//             <span>{file.name}</span>
-//           </>
-//         ) : (
-//           <span>No file uploaded</span>
-//         )}
-//       </div>
-//       <button type='submit' id='submit-button1'>
-//             Upload
-//           </button>
-//       <input
-//         type="file"
-//         id="file-input"
-//         onChange={handleFileChange}
-//         className="hidden-input"
-//         accept="*"
-//         hidden
-//       />
-//     </div>
-//   );
-// };
-
-// export default FileUpload;
-// FileUpload.js
 import React, { useState, useRef } from 'react';
+import axios from 'axios';
 import '../App.css';
 
 const FileUpload = () => {
@@ -46,34 +7,60 @@ const FileUpload = () => {
   const fileInputRef = useRef(null);
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    const selectedFile = event.target.files[0];
+    setFile(selectedFile);
+  };
+
+  const handleUpload = async () => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    console.log('Sending file:', file);
+
+    try {
+      const response = await axios.post('http://localhost:5001/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log('File uploaded successfully:', response.data);
+    } catch (error) {
+      console.error('File upload failed:', error);
+    }
   };
 
   const handleClick = () => {
-    fileInputRef.current.click();
+    if (!file) {
+      fileInputRef.current.click();
+    } else {
+      handleUpload();
+    }
   };
 
   return (
-    <div className="upload-container">
-      <div className="file-box">
+    <div className='upload-container'>
+      <div className='file-box'>
         {file ? (
           <>
-            <span className="file-icon">📄</span>
+            <span className='file-icon'>📄</span>
             <span>{file.name}</span>
           </>
         ) : (
           <span>No file uploaded</span>
         )}
       </div>
-      <button onClick={handleClick} className="upload-button1">
-        Upload
+      <button onClick={handleClick} className='upload-button1'>
+        {file ? 'Upload' : 'Choose File'}
       </button>
       <input
-        type="file"
+        type='file'
         ref={fileInputRef}
         onChange={handleFileChange}
-        className="hidden-input"
-        accept="*"
+        className='hidden-input'
+        accept='application/pdf'
         hidden
       />
     </div>
@@ -81,3 +68,4 @@ const FileUpload = () => {
 };
 
 export default FileUpload;
+
