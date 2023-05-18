@@ -1,46 +1,89 @@
-import React, { useState, useRef } from 'react';
-import axios from 'axios';
-import '../App.css';
+import React, { useState, useRef } from 'react'
+import axios from 'axios'
+import '../App.css'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const FileUpload = () => {
-  const [file, setFile] = useState(null);
-  const fileInputRef = useRef(null);
+  const [file, setFile] = useState(null)
+  const fileInputRef = useRef(null)
 
   const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setFile(selectedFile);
-  };
-  
+    const selectedFile = event.target.files[0]
+    setFile(selectedFile)
+  }
 
   const handleUpload = async () => {
-    if (!file) return;
+    if (!file) return
 
-    const formData = new FormData();
-    formData.append('file', file);
+    const formData = new FormData()
+    formData.append('file', file)
 
-    console.log('Sending file:', file);
+    console.log('Sending file:', file)
 
     try {
-      console.log(`${process.env.REACT_APP_SERVER_URL}/upload`)
-      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      if (!file) return
 
-      console.log('File uploaded successfully:', response.data);
+      const formData = new FormData()
+      formData.append('file', file)
+
+      console.log('Sending file:', file)
+
+      const responsePromise = axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/upload`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      )
+
+      toast.promise(responsePromise, {
+        pending: 'Uploading file...',
+        success: {
+          render: () => {
+            if (fileInputRef.current) {
+              fileInputRef.current.value = ''
+            }
+            setFile(null)
+            return 'File uploaded successfully!'
+          },
+          icon: '👍',
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        },
+        error: {
+          render: 'Failed to upload file.',
+          icon: '😭',
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        },
+      })
     } catch (error) {
-      console.error('File upload failed:', error);
+      console.error(error)
     }
-  };
+  }
 
   const handleClick = () => {
     if (!file) {
-      fileInputRef.current.click();
+      fileInputRef.current.click()
     } else {
-      handleUpload();
+      handleUpload()
     }
-  };
+  }
 
   return (
     <div className='upload-container'>
@@ -51,7 +94,7 @@ const FileUpload = () => {
             <span>{file.name}</span>
           </>
         ) : (
-          <span>No file uploaded</span>
+          <span>No file chosen</span>
         )}
       </div>
       <button onClick={handleClick} className='upload-button1'>
@@ -66,8 +109,7 @@ const FileUpload = () => {
         hidden
       />
     </div>
-  );
-};
+  )
+}
 
-export default FileUpload;
-
+export default FileUpload

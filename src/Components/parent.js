@@ -7,7 +7,7 @@ const ParentComponent = () => {
 
   return (
     <div>
-      <QueryBox setData={setData} /> // Pass the setData function as a prop
+      <QueryBox setData={setData} />
       <ResponseBox data={data} />
     </div>
   )
