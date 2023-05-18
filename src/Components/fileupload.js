@@ -10,6 +10,7 @@ const FileUpload = () => {
     const selectedFile = event.target.files[0];
     setFile(selectedFile);
   };
+  
 
   const handleUpload = async () => {
     if (!file) return;
@@ -20,7 +21,8 @@ const FileUpload = () => {
     console.log('Sending file:', file);
 
     try {
-      const response = await axios.post('http://localhost:5001/upload', formData, {
+      console.log(`${process.env.REACT_APP_SERVER_URL}/upload`)
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

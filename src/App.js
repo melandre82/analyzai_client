@@ -6,6 +6,7 @@ import QueryBox from './Components/querybox';
 import Header from './Components/header';
 import ResponseBox from './Components/responsebox';
 import FileUpload from './Components/fileupload';
+import ParentComponent from './Components/parent';
 
 
 function App() {
@@ -13,8 +14,10 @@ function App() {
     <div className="App">
       <main>
         <FileUpload/>
+        <ParentComponent/>
+        {/* <FileUpload/>
         <ResponseBox/>
-        <QueryBox />
+        <QueryBox /> */}
       </main>
     </div>
   );

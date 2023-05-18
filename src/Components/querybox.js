@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import '../App.css'
 import axios from 'axios'
 
-const QueryBox = () => {
+const QueryBox = ({ setData }) => {
   const [query, setQuery] = useState('')
 
   const handleQueryChange = (event) => {
@@ -10,19 +10,28 @@ const QueryBox = () => {
   }
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    await axios
-      .get('http://localhost:5001/')
-      .then((response) => {
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error)
-      })
-    console.log('Query:' + query)
+    try {
+      event.preventDefault()
+
+      const body = {
+        query: query,
+      }
+
+      await axios
+        .post('http://localhost:5001/query', body)
+        .then((response) => {
+          console.log(response.data)
+          console.log('typeof: ' + typeof response.data)
+          setData(response.data.text);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error)
+        })
+      console.log('Query:' + query)
+    } catch (error) {
+      console.log(error)
+    }
   }
-
-
 
   return (
     <div>
