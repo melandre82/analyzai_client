@@ -25,9 +25,11 @@ const QueryBox = ({ setData }) => {
           setData(response.data.text);
         })
         .catch((error) => {
-          console.error('Error fetching data:', error)
+          return console.error('Error fetching data:', error)
         })
-      console.log('Query:' + query)
+
+        setQuery('')
+      // console.log('Query:' + query)
     } catch (error) {
       console.log(error)
     }
