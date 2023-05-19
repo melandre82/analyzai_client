@@ -51,6 +51,8 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   border: none;
+  height: 2.3em;
+  width: 5em;
   color: #ffff;
   font-size: 1rem;
   padding: 0.5rem;
@@ -59,11 +61,16 @@ body {
 
 }
 
-#submit-button:hover {
+#submit-button:not(.loading):hover {
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* #submit-button:hover {
   cursor: pointer;
 
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
+} */
 
 
 
