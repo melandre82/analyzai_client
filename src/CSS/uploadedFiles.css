@@ -1,0 +1,41 @@
+.uploaded-files-container {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%); 
+  left: 0;
+  height: 100vh;
+  display: flex;
+  z-index: 1000; 
+}
+
+.file-list {
+  background-color: #40414e;
+  flex: 0 0 auto;
+  border-radius: 5px;
+  list-style: none;
+  padding: 20px;
+
+  overflow-y: scroll;
+    text-align: left;
+}
+
+.file-list li {
+  cursor: pointer; 
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.file-list li:hover {
+  background-color: #2f3039; 
+}
+
+.pdf-viewer {
+    flex-grow: 1; 
+    height: 100%;
+    overflow-y: auto;
+    background-color: #2f3039;
+    padding: 20px;
+    border-radius: 5px;
+
+}

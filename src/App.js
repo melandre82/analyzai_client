@@ -8,25 +8,31 @@ import ResponseBox from './Components/responsebox'
 import FileUpload from './Components/fileupload'
 import ParentComponent from './Components/parent'
 import { ToastContainer } from 'react-toastify'
+import UploadedFiles from './Components/uploadedFiles'
 
 function App() {
   return (
     <div className='App'>
       <main>
-        <ToastContainer
-          position='top-right'
-          autoClose={3000}
-          hideProgressBar
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme='dark'
-        />
-        <FileUpload />
-        <ParentComponent />
+        <UploadedFiles />
+
+        <div id="rightpart">
+          <ToastContainer
+            position='top-right'
+            autoClose={3000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme='dark'
+          />
+          <FileUpload />
+          <ParentComponent />
+        </div>
+
         {/* <FileUpload/>
         <ResponseBox/>
         <QueryBox /> */}

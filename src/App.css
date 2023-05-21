@@ -100,11 +100,10 @@ label {
   text-align: center;
   color: white;
   overflow-y: scroll;
-  text-align: left; /* Align text to the left */
+  text-align: left; 
 
 }
 
-/* FileUpload.css */
 
 .upload-container {
   display: flex;
@@ -135,9 +134,9 @@ label {
   justify-content: center;
   gap: 0.5rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* Add overflow property */
-  text-overflow: ellipsis; /* Add text-overflow property */
-  white-space: nowrap; /* Add white-space property */
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap;
 }
 
 
@@ -173,3 +172,6 @@ label {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
+.icon {
+width: 20px;
+}

@@ -3,6 +3,7 @@ import axios from 'axios'
 import '../App.css'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import localForage from 'localforage'
 
 const FileUpload = () => {
   const [file, setFile] = useState(null)
@@ -72,6 +73,8 @@ const FileUpload = () => {
           theme: 'dark',
         },
       })
+
+      await localForage.setItem(file.name, file)
     } catch (error) {
       console.error(error)
     }
