@@ -3,7 +3,7 @@ import QueryBox from './querybox'
 import ResponseBox from './responsebox'
 
 const ParentComponent = () => {
-  const [data, setData] = useState(null) // Ensure you define this state variable
+  const [data, setData] = useState(null)
 
   return (
     <div>
