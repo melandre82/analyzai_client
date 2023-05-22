@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import socket from '../sockets/socket';
 
 const QueryBox = ({ setData }) => {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    socket.on('hello', data => {
+      setData(data.text);
+    });
+
+    return () => {
+      socket.off('queryResults');
+    };
+  }, [setData]);
 
   const handleQueryChange = (event) => {
     setQuery(event.target.value);
@@ -26,7 +37,6 @@ const QueryBox = ({ setData }) => {
         .then((response) => {
           console.log(response.data);
           console.log('typeof: ' + typeof response.data);
-          setData(response.data.text);
         })
         .catch((error) => {
           console.error('Error fetching data:', error);
@@ -35,6 +45,8 @@ const QueryBox = ({ setData }) => {
           setLoading(false);
           setQuery('');
         });
+
+
     } catch (error) {
       console.log(error);
     }
