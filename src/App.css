@@ -79,34 +79,6 @@ label {
   color: white;
 }
 
-/* Box.css */
-/* .box-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 50vw;
-  margin-left: auto;
-  margin-right: 0.5%;
-  overflow: scroll;
-}
-
-.box-content {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  background-color: #40414e;
-  border-radius: 5px;
-  padding: 20px;
-  width: 80vw;
-  height: 80vh;
-  text-align: center;
-  color: white;
-  overflow-y: scroll;
-  text-align: left; 
-
-} */
-
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -120,12 +92,12 @@ html, body, #root {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  width: 500px;    /* adjust this as needed */
-  height: 500px;   /* adjust this as needed */
+  width: 45vw;  
+  height: 80vh; 
   overflow-y: auto;
-  background: #f0f0f0; /* adjust this as needed */
-  border: 1px solid #ddd; /* adjust this as needed */
-  border-radius: 10px; /* adjust this as needed */
+  background: #40414e;
+  /* border: 1px solid #ddd;  */
+  border-radius: 10px;
 }
 
 
@@ -139,7 +111,7 @@ html, body, #root {
 }
 
 .box-content {
-  max-width: 60%;
+  max-width: 80%;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 20px;
@@ -148,14 +120,14 @@ html, body, #root {
 
 .box-content.user {
   align-self: flex-end;
-  background-color: #0b93f6;  /* background color for user message */
+  background-color: #29b62b; 
   color: white;
 }
 
 .box-content.server {
   align-self: flex-start;
-  background-color: #e5e5ea;  /* background color for server response */
-  color: black;
+  background-color: #007bff; 
+  color: white;
 }
 
 .file-box {

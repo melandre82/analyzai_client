@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { io } from 'socket.io-client'
 import QueryBox from './querybox'
 
@@ -6,7 +6,23 @@ const ResponseBox = () => {
   const [messages, setMessages] = useState([])
   const [currentResponse, setCurrentResponse] = useState({ text: '' })
 
+
+  const messageEl = useRef(null);
+
   useEffect(() => {
+    if (messageEl) {
+      messageEl.current.addEventListener('DOMNodeInserted', event => {
+        const { currentTarget: target } = event;
+        target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
+      });
+    }
+  }, [])
+
+  useEffect(() => {
+
+  
+
+
     const socket = io(process.env.REACT_APP_SERVER_URL)
 
     socket.on('responseStart', () => {
@@ -39,9 +55,11 @@ const ResponseBox = () => {
     ])
   }
 
+ 
+
   return (
     <div>
-      <div className='box-container'>
+      <div className='box-container' ref={messageEl}>
         {messages.map((message, index) => (
           <div key={index} className={`box-content ${message.type}`}>
             {message.text}
