@@ -8,7 +8,8 @@ import ResponseBox from './Components/responsebox'
 import FileUpload from './Components/fileupload'
 import ParentComponent from './Components/parent'
 import { ToastContainer } from 'react-toastify'
-import UploadedFiles from './Components/uploadedFiles'
+// import UploadedFiles from './Components/uploadedFiles'
+import UploadedFiles from './Components/uploadedFiles-copy'
 
 function App() {
   return (
