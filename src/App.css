@@ -2,14 +2,7 @@ body {
   background-color: #343540;
 }
 
-.header {
-  background-color: darkcyan;
 
-  width: 100%;
-  position: sticky;
-  top: 0;
-  border: 1px solid darkcyan;
-}
 
 #textbox {
   width: 33.33%;
@@ -82,13 +75,32 @@ label {
 html, body, #root {
   height: 100%;
   margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
 }
 
+#root {
+  height: 100%;
+  margin: 0;
+  display: grid;
+  justify-items: end;  
+  align-items: center; 
+  grid-gap: 5%; 
+}
+
+.box-container, .uploaded-files-container {
+  height: 80vh;
+  width: 45%;  
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #40414e;
+}
+
+
 .box-container {
-  position: relative;
+  position: absolute;
+  top: 50%; 
+  transform: translateY(-50%); 
+  right: 0.5vw;
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -96,8 +108,9 @@ html, body, #root {
   height: 80vh; 
   overflow-y: auto;
   background: #40414e;
-  /* border: 1px solid #ddd;  */
   border-radius: 10px;
+  margin-left: 10px;
+  
 }
 
 

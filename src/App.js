@@ -17,7 +17,7 @@ function App() {
 
         <UploadedFiles />
 
-        <div id="rightpart">
+
           <ToastContainer
             position='top-right'
             autoClose={3000}
@@ -32,7 +32,7 @@ function App() {
           />
           <FileUpload />
           <ParentComponent />
-        </div>
+
 
         {/* <FileUpload/>
         <ResponseBox/>

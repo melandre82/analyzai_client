@@ -18,6 +18,7 @@ function UploadedFiles() {
   
   return (
     <div className="uploaded-files-container">
+      <div className="file-bar">
       <ul className="file-list">
         {files.map(({ name, file }, index) => (
           <li key={index} onClick={() => setCurrentFile(file)}>
@@ -25,6 +26,7 @@ function UploadedFiles() {
           </li>
         ))}
       </ul>
+      </div>
       {currentFile && (
         <div className="pdf-viewer">
           <Document file={currentFile}>
