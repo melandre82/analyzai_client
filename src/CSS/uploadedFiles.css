@@ -1,10 +1,11 @@
 .file-bar {
   height: 100%;
-  width: 20%;
+  width: 10vw;
   overflow-y: scroll;
+  overflow-x: scroll;
   border-radius: 10px;
   background-color: #292a32;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .file-list {
@@ -15,20 +16,22 @@
 
   padding: 5px;
 
-  /* position: relative; */
+
   display: block;
-  overflow-y: scroll;
+
   text-align: left;
   margin: 0;
   margin-bottom: 0;
 }
 
 .file-list li {
+  width: auto, fit-content;
   cursor: pointer;
   background-color: #3d3e49;
   padding: 3px;
   margin-bottom: 5px;
   border-radius: 5px;
+
 }
 
 li img {
@@ -42,7 +45,10 @@ li img {
   background-color: #2f3039;
 }
 
+.pdf-container {
+  position: relative;
 
+}
 
 .pdf-viewer {
   height: 100%;
@@ -52,18 +58,25 @@ li img {
   background-color: grey;
   border-radius: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin: 0;
 
+  background-color: white;
+}
 
+
+.zoom-slider {
+  position: absolute;
+  top: 10px;
+  left: 60%;
+  transform: translateX(-50%);
+  z-index: 1100;
 }
 
 .uploaded-files-container {
   top: 50%;
   left: 0.5vw;
   height: 80vh;
-  /* width: 45vw; */
-  /* left: 0.5vw; */
   display: flex;
   z-index: 1000;
   position: absolute;
@@ -75,6 +88,7 @@ li img {
   color: white;
   margin-right: 10px;
 
+  width: 43%;
 
 }
 
@@ -86,7 +100,7 @@ li img {
 .box-container, .uploaded-files-container {
 
   height: 80vh;
-  width: 48%; 
+
   padding: 10px;
   border-radius: 10px;
   background-color: #40414e;
