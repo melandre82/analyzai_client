@@ -17,6 +17,8 @@ export default function UploadedFiles() {
   const [scale, setScale] = useState(1.5)
   const [renderedPageNumber, setRenderedPageNumber] = useState(null)
   const [renderedScale, setRenderedScale] = useState(null)
+  const [inputValue, setInputValue] = useState(pageNumber);
+
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages)
@@ -51,6 +53,27 @@ export default function UploadedFiles() {
   }
 
   useEffect(() => {
+    setInputValue(pageNumber);
+  }, [pageNumber]);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  }
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      const newPageNumber = parseInt(e.target.value);
+      if (newPageNumber >= 1 && newPageNumber <= numPages) {
+        setPageNumber(newPageNumber);
+        e.target.blur();
+      } else {
+        setInputValue(pageNumber);  // Reset inputValue if it's not valid
+      }
+    }
+  
+  }
+
+  useEffect(() => {
     localForage.iterate((value, key) => {
       setFiles((files) => [...files, { name: key, file: value }])
     })
@@ -63,56 +86,67 @@ export default function UploadedFiles() {
       <div className='navigation-box'>
         <div className='navigation'>
           {/* <div className='page-controller'> */}
-            <div className='page-number'>
+          {/* <div className='page-number'>
               <p>
                 {pageNumber || (numPages ? 1 : '--')} / {numPages || '--'}
               </p>
-            </div>
-            <button
-              type='button'
-              className='previous'
-              disabled={pageNumber <= 1}
-              onClick={previousPage}
-            >
-              &lt;
-            </button>{' '}
-            <button
-              type='button'
-              className='next'
-              disabled={pageNumber >= numPages}
-              onClick={nextPage}
-            >
-              &gt;
-            </button>
+            </div> */}
+         <div className='page-number'>
+            <input
+              type="text"
+              value={inputValue}
+              onClick={(event) => event.target.select()}
+              onChange={handleInputChange}
+              onKeyPress={handleKeyPress}
+            />
+            <span> / {numPages || '-'}</span>
+            {/* <span> / {99999 || '-'}</span> */}
+          </div>
+          <button
+            type='button'
+            className='previous'
+            disabled={pageNumber <= 1}
+            onClick={previousPage}
+          >
+            &lt;
+          </button>{' '}
+          <button
+            type='button'
+            className='next'
+            disabled={pageNumber >= numPages}
+            onClick={nextPage}
+          >
+            &gt;
+          </button>
           {/* </div> */}
           {/* <div className='size-control'> */}
-            <button type='button' className='reset' onClick={resetScale}>
-              {Math.round((scale * 100) / 1.5)}%
-            </button>
-            <button
-              type='button'
-              className='minus'
-              disabled={scale <= 1}
-              onClick={decreaseScale}
-            >
-              -
-            </button>{' '}
-            <input
-              type='range'
-              min='1'
-              max='3'
-              value={scale}
-              onChange={(event) => setScale(Number(event.target.value))}
-              step='0.1'
-            />{' '}
-            <button
-              type='button'
-              className='plus'
-              disabled={scale >= 3}
-              onClick={increaseScale}
-            >
-              +
-            </button>
+          <button type='button' className='reset' onClick={resetScale}>
+            {Math.round((scale * 100) / 1.5)}%
+          </button>
+          <button
+            type='button'
+            className='minus'
+            disabled={scale <= 1}
+            onClick={decreaseScale}
+          >
+            -
+          </button>{' '}
+          <input
+            type='range'
+            min='1'
+            max='3'
+            value={scale}
+            onChange={(event) => setScale(Number(event.target.value))}
+            step='0.1'
+          />{' '}
+          <button
+            type='button'
+            className='plus'
+            disabled={scale >= 3}
+            onClick={increaseScale}
+          >
+            +
+          </button>
           {/* </div> */}
         </div>
       </div>
