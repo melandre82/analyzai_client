@@ -10,14 +10,18 @@ import ParentComponent from './Components/parent'
 import { ToastContainer } from 'react-toastify'
 // import UploadedFiles from './Components/uploadedFiles'
 import UploadedFiles from './Components/uploadedFiles'
+import UserAuth from './Components/user-auth'
+import ProtectedRoute from './Components/protected-route'
+import LogoutButton from './Components/logout'
 
 function App() {
   return (
     <div className='App'>
       <main>
-
-        <UploadedFiles />
-
+        <UserAuth />
+        <ProtectedRoute>
+          <LogoutButton />
+          <UploadedFiles />
 
           <ToastContainer
             position='top-right'
@@ -33,11 +37,7 @@ function App() {
           />
           <FileUpload />
           <ParentComponent />
-
-
-        {/* <FileUpload/>
-        <ResponseBox/>
-        <QueryBox /> */}
+        </ProtectedRoute>
       </main>
     </div>
   )
