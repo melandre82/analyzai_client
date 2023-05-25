@@ -4,10 +4,13 @@ import '../App.css'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import localForage from 'localforage'
+import { auth } from '../conf/firebase'
 
 const FileUpload = () => {
   const [file, setFile] = useState(null)
   const fileInputRef = useRef(null)
+
+  const user = auth.currentUser
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0]
@@ -19,16 +22,13 @@ const FileUpload = () => {
 
     const formData = new FormData()
     formData.append('file', file)
+    formData.append('uid', user.uid)
 
-    console.log('Sending file:', file)
 
     try {
-      if (!file) return
-
-      const formData = new FormData()
-      formData.append('file', file)
-
-      console.log('Sending file:', file)
+      if (!file) {
+        return
+      }
 
       const responsePromise = axios.post(
         `${process.env.REACT_APP_SERVER_URL}/upload`,
@@ -39,6 +39,9 @@ const FileUpload = () => {
           },
         }
       )
+
+      console.log('uid: ' + formData.get('uid')) // Should log the uid
+      // console.log(formData.get('file'))
 
       toast.promise(responsePromise, {
         pending: 'Uploading file...',

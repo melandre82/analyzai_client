@@ -156,7 +156,7 @@ export default function UploadedFiles() {
             {files.map(({ name, file }, index) => (
               <li key={index} onClick={() => setCurrentFile(file)}>
                 <img
-                  class='icon'
+                  className='icon'
                   src={require('../icons/icons8-pdf-96.png')}
                   alt='Icon'
                 />{' '}

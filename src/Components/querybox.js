@@ -4,20 +4,13 @@ import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import socket from '../sockets/socket'
+import { auth } from '../conf/firebase'
 
 const QueryBox = ({ onSubmit, setData }) => {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
 
-  // useEffect(() => {
-  //   socket.on('hello', (data) => {
-  //     setData(data.text)
-  //   })
-
-  //   return () => {
-  //     socket.off('queryResults')
-  //   }
-  // }, [setData])
+  const user = auth.currentUser
 
   const handleQueryChange = (event) => {
     setQuery(event.target.value)
@@ -30,6 +23,7 @@ const QueryBox = ({ onSubmit, setData }) => {
 
       const body = {
         query: query,
+        uid: user.uid,
       }
 
       onSubmit(query)
