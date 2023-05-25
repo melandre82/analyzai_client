@@ -332,23 +332,23 @@ export default function UploadedFiles() {
           <button
             type='button'
             className='minus'
-            disabled={scale <= 1}
+            disabled={scale <= 0.5}
             onClick={decreaseScale}
           >
             -
           </button>{' '}
           <input
             type='range'
-            min='1'
-            max='3'
+            min='0.5'
+            max='5'
             value={scale}
             onChange={(event) => setScale(Number(event.target.value))}
-            step='0.1'
+            step='0.2'
           />{' '}
           <button
             type='button'
             className='plus'
-            disabled={scale >= 3}
+            disabled={scale >= 5}
             onClick={increaseScale}
           >
             +
