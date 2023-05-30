@@ -21,7 +21,7 @@ function App() {
         <UserAuth />
         <ProtectedRoute>
           <LogoutButton />
-          <UploadedFiles />
+          {/* <UploadedFiles /> */}
 
           <ToastContainer
             position='top-right'

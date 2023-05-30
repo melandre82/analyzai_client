@@ -6,11 +6,13 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import socket from '../sockets/socket'
 import { auth } from '../conf/firebase'
 
-const QueryBox = ({ onSubmit, setData }) => {
+const QueryBox = ({ onSubmit, setData, setHighlightText }) => {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
 
   const user = auth.currentUser
+
+  console.log('QueryBox', setHighlightText);
 
   const handleQueryChange = (event) => {
     setQuery(event.target.value)
@@ -32,6 +34,9 @@ const QueryBox = ({ onSubmit, setData }) => {
         .post('http://localhost:5001/query', body)
         .then((response) => {
           console.log(response.data)
+          // setHighlightText(response.data.textContent)
+          console.log('highlightText: ' + response.data.sourceDocuments[0].pageContent)
+
           console.log('typeof: ' + typeof response.data)
         })
         .catch((error) => {
@@ -41,8 +46,6 @@ const QueryBox = ({ onSubmit, setData }) => {
           setLoading(false)
           setQuery('')
         })
-
-      
     } catch (error) {
       console.log(error)
     }
