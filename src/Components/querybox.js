@@ -6,13 +6,12 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import socket from '../sockets/socket'
 import { auth } from '../conf/firebase'
 
-const QueryBox = ({ onSubmit, setData, setHighlightText }) => {
+const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted }) => {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
 
   const user = auth.currentUser
 
-  console.log('QueryBox', setHighlightText);
 
   const handleQueryChange = (event) => {
     setQuery(event.target.value)
@@ -34,10 +33,10 @@ const QueryBox = ({ onSubmit, setData, setHighlightText }) => {
         .post('http://localhost:5001/query', body)
         .then((response) => {
           console.log(response.data)
-          // setHighlightText(response.data.textContent)
-          console.log('highlightText: ' + response.data.sourceDocuments[0].pageContent)
+          setTextToBeHighlighted(response.data.sourceDocuments[0].pageContent)
+          // console.log('highlightText: ' + response.data.sourceDocuments[0].pageContent)
 
-          console.log('typeof: ' + typeof response.data)
+          // console.log('typeof: ' + typeof response.data)
         })
         .catch((error) => {
           console.error('Error fetching data:', error)

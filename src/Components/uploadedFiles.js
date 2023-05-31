@@ -10,7 +10,7 @@ import '../CSS/uploadedFiles.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`
 
-export default function UploadedFiles( {highlightText} ) {
+export default function UploadedFiles({ textToBeHighlighted }) {
   const [files, setFiles] = useState([])
   const [currentFile, setCurrentFile] = useState(null)
   const [numPages, setNumPages] = useState(null)
@@ -19,18 +19,40 @@ export default function UploadedFiles( {highlightText} ) {
   const [renderedPageNumber, setRenderedPageNumber] = useState(null)
   const [renderedScale, setRenderedScale] = useState(null)
   const [inputValue, setInputValue] = useState(pageNumber)
-  // const [searchText, setSearchText] = useState('penguins')
+  const [extractedPDFText, setExtractedPDFText] = useState()
 
   const user = auth.currentUser
 
-  const highlightPattern = (text, pattern) => {
-    return text.replace(pattern, (value) => `<mark>${value}</mark>`)
+  // Annotation
+
+  function escapeRegExp(text) {
+
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  }
+
+  function highlightPattern(text, pattern) {
+    const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    const regex = new RegExp(escapedPattern, 'gi');
+    return text.replace(regex, (value) => `<mark>${value}</mark>`);
   }
 
   const textRenderer = useCallback(
-    (textItem) => highlightPattern(textItem.str, highlightText),
-    [highlightText]
-  );
+    (textItem) => {
+
+      let result = textItem.str
+      console.log('textItem.str: ' + textItem.str)
+      if (extractedPDFText && extractedPDFText.includes(textToBeHighlighted)) {
+        result = highlightPattern(textItem.str, textToBeHighlighted)
+        // console.log('text to highlight: ', textToBeHighlighted)
+        // console.log('text: , ' + extractedPDFText)
+      }
+
+      return result // return the output
+    },
+    [textToBeHighlighted, extractedPDFText]
+  )
+
+  //
 
   useEffect(() => {
     const userId = user.uid
@@ -95,9 +117,18 @@ export default function UploadedFiles( {highlightText} ) {
         setPageNumber(newPageNumber)
         e.target.blur()
       } else {
-        setInputValue(pageNumber) // Reset inputValue if it's not valid
+        setInputValue(pageNumber) 
       }
     }
+  }
+
+  function formatText(texts) {
+    let textFinal = ''
+    for (let i = 0; i < texts.items.length; i++) {
+      textFinal += texts.items[i].str
+    }
+    console.log('extracted pdf text: ' + textFinal)
+    setExtractedPDFText(textFinal)
   }
 
   const isLoading = renderedPageNumber !== pageNumber || renderedScale !== scale
@@ -185,17 +216,18 @@ export default function UploadedFiles( {highlightText} ) {
             <Document file={currentFile} onLoadSuccess={onDocumentLoadSuccess}>
               {isLoading && renderedPageNumber && renderedScale ? (
                 <Page
-                  key={renderedPageNumber + '@' + renderedScale}
+                  key={`${pageNumber}@${scale}@${textToBeHighlighted}`}
                   className='prevPage'
                   // renderTextLayer={true}
                   customTextRenderer={textRenderer}
                   pageNumber={renderedPageNumber}
                   scale={renderedScale}
                   width={400}
+                  onGetTextSuccess={(text) => formatText(text)}
                 />
               ) : null}
               <Page
-                key={pageNumber + '@' + scale}
+                key={`${pageNumber}@${scale}@${textToBeHighlighted}`}
                 pageNumber={pageNumber}
                 // renderTextLayer={true}
                 customTextRenderer={textRenderer}
@@ -204,6 +236,7 @@ export default function UploadedFiles( {highlightText} ) {
                   setRenderedScale(scale)
                 }}
                 scale={scale}
+                onGetTextSuccess={(text) => formatText(text)}
                 width={400}
               />
             </Document>
