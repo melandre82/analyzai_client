@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import QueryBox from './querybox'
 import ResponseBox from './responsebox'
-import UploadedFiles from './uploadedFiles'
+import UploadedFiles from './uploadedFiles.js'
 import { io } from 'socket.io-client'
 
 const ParentComponent = () => {
   const [data, setData] = useState(null)
-  const [textToBeHighlighted, setTextToBeHighlighted] = useState('The FIA Formula One World Championship has been one of the premier')
+  const [textToBeHighlighted, setTextToBeHighlighted] = useState('')
   const [messages, setMessages] = useState([])
   const [currentResponse, setCurrentResponse] = useState({ text: '' })
 

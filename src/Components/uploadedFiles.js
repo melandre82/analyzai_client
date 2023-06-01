@@ -25,13 +25,10 @@ export default function UploadedFiles({ textToBeHighlighted }) {
 
   // Annotation
 
-  function escapeRegExp(text) {
 
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-  }
 
   function highlightPattern(text, pattern) {
-    const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+    const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); 
     const regex = new RegExp(escapedPattern, 'gi');
     return text.replace(regex, (value) => `<mark>${value}</mark>`);
   }

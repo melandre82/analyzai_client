@@ -13,6 +13,7 @@ import UploadedFiles from './Components/uploadedFiles'
 import UserAuth from './Components/user-auth'
 import ProtectedRoute from './Components/protected-route'
 import LogoutButton from './Components/logout'
+import Test from './Components/test'
 
 function App() {
   return (
@@ -36,7 +37,8 @@ function App() {
             theme='dark'
           />
           <FileUpload />
-          <ParentComponent />
+          {/* <ParentComponent /> */}
+          <Test/>
         </ProtectedRoute>
       </main>
     </div>
