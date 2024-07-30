@@ -40,7 +40,7 @@ const FileUpload = () => {
         }
       )
 
-      console.log('uid: ' + formData.get('uid')) // Should log the uid
+      // console.log('uid: ' + formData.get('uid')) // Should log the uid
       // console.log(formData.get('file'))
 
       toast.promise(responsePromise, {

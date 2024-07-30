@@ -10,7 +10,7 @@ import '../CSS/uploadedFiles.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`
 
-export default function UploadedFiles({ textToBeHighlighted }) {
+export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName }) {
   const [files, setFiles] = useState([])
   const [currentFile, setCurrentFile] = useState(null)
   const [numPages, setNumPages] = useState(null)
@@ -37,7 +37,7 @@ export default function UploadedFiles({ textToBeHighlighted }) {
     (textItem) => {
 
       let result = textItem.str
-      console.log('textItem.str: ' + textItem.str)
+      // console.log('textItem.str: ' + textItem.str)
       if (extractedPDFText && extractedPDFText.includes(textToBeHighlighted)) {
         result = highlightPattern(textItem.str, textToBeHighlighted)
         // console.log('text to highlight: ', textToBeHighlighted)
@@ -124,7 +124,7 @@ export default function UploadedFiles({ textToBeHighlighted }) {
     for (let i = 0; i < texts.items.length; i++) {
       textFinal += texts.items[i].str
     }
-    console.log('extracted pdf text: ' + textFinal)
+    // console.log('extracted pdf text: ' + textFinal)
     setExtractedPDFText(textFinal)
   }
 
@@ -195,7 +195,11 @@ export default function UploadedFiles({ textToBeHighlighted }) {
             {files.map((file) => (
               <li
                 key={file.id}
-                onClick={() => setCurrentFile(file.downloadURL)}
+                onClick={() => {
+                  setCurrentFile(file.downloadURL);
+                  setCurrentFileName(file.id);
+                  console.log('current file: ' + file.downloadURL);
+                }}
               >
                 <img
                   className='icon'

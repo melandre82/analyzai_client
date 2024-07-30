@@ -9,6 +9,8 @@ const ParentComponent = () => {
   const [textToBeHighlighted, setTextToBeHighlighted] = useState('')
   const [messages, setMessages] = useState([])
   const [currentResponse, setCurrentResponse] = useState({ text: '' })
+  const [currentFileName, setCurrentFileName] = useState(null)
+
 
   // useEffect(() => {
   //   console.log('parent ' + highlightText)
@@ -16,6 +18,8 @@ const ParentComponent = () => {
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_SERVER_URL)
+
+    console.log('from parent' + currentFileName)
 
     socket.on('responseStart', () => {
       setCurrentResponse({ type: 'server', text: [] })
@@ -31,6 +35,10 @@ const ParentComponent = () => {
 
     return () => socket.disconnect()
   }, [])
+
+  useEffect(() => {
+    console.log('currentFileName has been updated to:', currentFileName);
+  }, [currentFileName]); 
 
   const handleUserMessageSubmit = (userMessage) => {
     if (currentResponse.text.length > 0) {
@@ -49,13 +57,16 @@ const ParentComponent = () => {
         setData={setData}
         setTextToBeHighlighted={setTextToBeHighlighted}
         onSubmit={handleUserMessageSubmit}
+        currentFileName={currentFileName}
       />
       <ResponseBox
         data={data}
         messages={messages}
         currentResponse={currentResponse}
       />
-      <UploadedFiles textToBeHighlighted={textToBeHighlighted}/>
+      <UploadedFiles textToBeHighlighted={textToBeHighlighted} 
+      setCurrentFileName={setCurrentFileName}
+      />
     </div>
   )
 }

@@ -46,8 +46,8 @@ function highlightPattern(text, pattern) {
       </mark>,
     ] : [...arr, element]), []))
 
-    console.log('text2: ', text2)
-    console.log('text2: ', text2[1].props.children)
+    // console.log('text2: ', text2)
+    // console.log('text2: ', text2[1].props.children)
     return `<mark>${text2[1].props.children}</mark>`
   }
 

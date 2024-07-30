@@ -6,7 +6,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import socket from '../sockets/socket'
 import { auth } from '../conf/firebase'
 
-const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted }) => {
+const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName }) => {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -22,21 +22,22 @@ const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted }) => {
       event.preventDefault()
       setLoading(true)
 
+      if ( currentFileName !== null ) {
+
       const body = {
         query: query,
         uid: user.uid,
+        currentFileName: currentFileName
       }
 
       onSubmit(query)
 
       await axios
-        .post('http://localhost:5001/query', body)
+        .post('http://localhost:6060/query', body)
         .then((response) => {
           console.log(response.data)
-          setTextToBeHighlighted(response.data.sourceDocuments[0].pageContent)
-          // console.log('highlightText: ' + response.data.sourceDocuments[0].pageContent)
-
-          // console.log('typeof: ' + typeof response.data)
+          // setTextToBeHighlighted(response.data.sourceDocuments[0].pageContent)
+          
         })
         .catch((error) => {
           console.error('Error fetching data:', error)
@@ -45,6 +46,10 @@ const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted }) => {
           setLoading(false)
           setQuery('')
         })
+
+      } else {
+        console.log('No file selected')
+      }
     } catch (error) {
       console.log(error)
     }

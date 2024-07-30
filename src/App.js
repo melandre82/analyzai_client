@@ -22,7 +22,7 @@ function App() {
         <UserAuth />
         <ProtectedRoute>
           <LogoutButton />
-          {/* <UploadedFiles /> */}
+          <UploadedFiles />
 
           <ToastContainer
             position='top-right'
@@ -37,9 +37,9 @@ function App() {
             theme='dark'
           />
           <FileUpload />
-          {/* <ParentComponent /> */}
-          <Test/>
-        </ProtectedRoute>
+          <ParentComponent />
+          {/* <Test/> */}
+        </ProtectedRoute> 
       </main>
     </div>
   )
