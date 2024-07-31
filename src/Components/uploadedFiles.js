@@ -128,6 +128,15 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
     setExtractedPDFText(textFinal)
   }
 
+  function resetViewerState() {
+    setPageNumber(1)
+    setScale(1.5)
+    setRenderedPageNumber(null)
+    setRenderedScale(null)
+    setExtractedPDFText(null)
+  }
+
+
   const isLoading = renderedPageNumber !== pageNumber || renderedScale !== scale
 
   return (
@@ -196,9 +205,10 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
               <li
                 key={file.id}
                 onClick={() => {
+                  console.log('File clicked: ', file.id)
                   setCurrentFile(file.downloadURL);
                   setCurrentFileName(file.id);
-                  console.log('current file: ' + file.downloadURL);
+                  resetViewerState();
                 }}
               >
                 <img
@@ -217,7 +227,7 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
             <Document file={currentFile} onLoadSuccess={onDocumentLoadSuccess}>
               {isLoading && renderedPageNumber && renderedScale ? (
                 <Page
-                  key={`${pageNumber}@${scale}@${textToBeHighlighted}`}
+                  key={`prev-${pageNumber}-${scale}-${textToBeHighlighted}`} 
                   className='prevPage'
                   // renderTextLayer={true}
                   customTextRenderer={textRenderer}
@@ -228,7 +238,7 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
                 />
               ) : null}
               <Page
-                key={`${pageNumber}@${scale}@${textToBeHighlighted}`}
+                key={`current-${pageNumber}-${scale}-${textToBeHighlighted}`} 
                 pageNumber={pageNumber}
                 // renderTextLayer={true}
                 customTextRenderer={textRenderer}
