@@ -36,9 +36,10 @@ const ParentComponent = () => {
     })
 
     return () => socket.disconnect()
-  }, )
+  }, [currentFileName])
 
   // Fetch the chat history if the user or current file name changes
+
   useEffect(() => {
     console.log('currentFileName has been updated to:', currentFileName);
     if (currentFileName) {
@@ -49,16 +50,15 @@ const ParentComponent = () => {
             uid: user.uid,
             documentId: currentFileName
           }
-          const response = await axios.get('http://localhost:6060/chat-history', body)
+          const response = await axios.post('http://localhost:6060/chat-history', body)
           console.log(response.data)
           // setMessages(response.data)
         } catch (error) {
           console.error('Error fetching chat history:', error)
       }
 
-      }
       fetchChatHistory();
-
+      }
     }
   }, [currentFileName, user]); 
 
