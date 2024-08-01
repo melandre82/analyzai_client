@@ -6,13 +6,23 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import socket from '../sockets/socket'
 import { auth } from '../conf/firebase'
 
-const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName }) => {
+const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName, setUser }) => {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
+  const [user, setUserState] = useState(auth.currentUser) // Initialize user state
 
-  const user = auth.currentUser
 
+  useEffect(() => {
+    // Set up the authentication state observer and get user data
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user)
+      setUserState(user) // Update local user state
+    })
 
+    // Cleanup subscription on unmount
+    return () => unsubscribe()
+  }, [setUser])
+  
   const handleQueryChange = (event) => {
     setQuery(event.target.value)
   }

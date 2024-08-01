@@ -3,6 +3,7 @@ import QueryBox from './querybox'
 import ResponseBox from './responsebox'
 import UploadedFiles from './uploadedFiles.js'
 import { io } from 'socket.io-client'
+import axios from 'axios'
 
 const ParentComponent = () => {
   const [data, setData] = useState(null)
@@ -10,6 +11,7 @@ const ParentComponent = () => {
   const [messages, setMessages] = useState([])
   const [currentResponse, setCurrentResponse] = useState({ text: '' })
   const [currentFileName, setCurrentFileName] = useState(null)
+  const [user, setUser] = useState(null)
 
 
   // useEffect(() => {
@@ -34,11 +36,33 @@ const ParentComponent = () => {
     })
 
     return () => socket.disconnect()
-  }, [])
+  }, )
 
+  // Fetch the chat history if the user or current file name changes
   useEffect(() => {
     console.log('currentFileName has been updated to:', currentFileName);
-  }, [currentFileName]); 
+    if (currentFileName) {
+
+      const fetchChatHistory = async () => {
+        try {
+          const body = {
+            uid: user.uid,
+            documentId: currentFileName
+          }
+          const response = await axios.get('http://localhost:6060/chat-history', body)
+          console.log(response.data)
+          // setMessages(response.data)
+        } catch (error) {
+          console.error('Error fetching chat history:', error)
+      }
+
+      }
+      fetchChatHistory();
+
+    }
+  }, [currentFileName, user]); 
+
+
 
   const handleUserMessageSubmit = (userMessage) => {
     if (currentResponse.text.length > 0) {
@@ -58,6 +82,7 @@ const ParentComponent = () => {
         setTextToBeHighlighted={setTextToBeHighlighted}
         onSubmit={handleUserMessageSubmit}
         currentFileName={currentFileName}
+        setUser={setUser}
       />
       <ResponseBox
         data={data}
