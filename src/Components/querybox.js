@@ -6,11 +6,15 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import socket from '../sockets/socket'
 import { auth } from '../conf/firebase'
 
-const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName }) => {
+const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName, user }) => {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const user = auth.currentUser
+  // const user = auth.currentUser
+
+  useEffect(() => {
+    // console.log('Received user in QueryBox:', user) // Debugging log
+  }, [user])
 
 
   const handleQueryChange = (event) => {

@@ -4,6 +4,8 @@ import ResponseBox from './responsebox'
 import UploadedFiles from './uploadedFiles.js'
 import { io } from 'socket.io-client'
 import axios from 'axios'
+import { auth } from '../conf/firebase'
+
 
 const ParentComponent = () => {
   const [data, setData] = useState(null)
@@ -13,6 +15,16 @@ const ParentComponent = () => {
   const [currentFileName, setCurrentFileName] = useState(null)
   const [user, setUser] = useState(null)
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      // console.log('Auth state changed, user:', user) // Debugging log
+      setUser(user)
+    })
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe()
+  }, [])
+
 
   // useEffect(() => {
   //   console.log('parent ' + highlightText)
@@ -21,14 +33,14 @@ const ParentComponent = () => {
   useEffect(() => {
     const socket = io(process.env.REACT_APP_SERVER_URL)
 
-    console.log('from parent' + currentFileName)
+    // console.log('from parent' + currentFileName)
 
     socket.on('responseStart', () => {
       setCurrentResponse({ type: 'server', text: [] })
     })
 
     socket.on('newToken', (data) => {
-      console.log('Received data:', data)
+      // console.log('Received data:', data)
       setCurrentResponse((prevResponse) => ({
         type: data.type,
         text: [...prevResponse.text, data.token],
@@ -41,11 +53,13 @@ const ParentComponent = () => {
   // Fetch the chat history if the user or current file name changes
 
   useEffect(() => {
-    console.log('currentFileName has been updated to:', currentFileName);
+    // console.log('currentFileName has been updated to:', currentFileName);
     if (currentFileName) {
 
       const fetchChatHistory = async () => {
         try {
+
+          // console.log('Fetching chat history for user:', user.uid, 'and document:', currentFileName)
           const body = {
             uid: user.uid,
             documentId: currentFileName
@@ -57,8 +71,9 @@ const ParentComponent = () => {
           console.error('Error fetching chat history:', error)
       }
 
-      fetchChatHistory();
       }
+      fetchChatHistory();
+
     }
   }, [currentFileName, user]); 
 
@@ -82,7 +97,7 @@ const ParentComponent = () => {
         setTextToBeHighlighted={setTextToBeHighlighted}
         onSubmit={handleUserMessageSubmit}
         currentFileName={currentFileName}
-        setUser={setUser}
+        user={user}
       />
       <ResponseBox
         data={data}
