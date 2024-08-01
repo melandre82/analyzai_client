@@ -32,58 +32,57 @@ const ParentComponent = () => {
 
   useEffect(() => {
     const socket = io(process.env.REACT_APP_SERVER_URL)
-
-    // console.log('from parent' + currentFileName)
-
+  
     socket.on('responseStart', () => {
       setCurrentResponse({ type: 'server', text: [] })
     })
-
+  
     socket.on('newToken', (data) => {
-      // console.log('Received data:', data)
       setCurrentResponse((prevResponse) => ({
-        type: data.type,
+        type: 'server', 
         text: [...prevResponse.text, data.token],
       }))
     })
-
+  
     return () => socket.disconnect()
   }, [currentFileName])
-
   // Fetch the chat history if the user or current file name changes
 
   useEffect(() => {
-    // console.log('currentFileName has been updated to:', currentFileName);
-    if (currentFileName) {
-
+    if (currentFileName && user) {
       const fetchChatHistory = async () => {
         try {
-
-          // console.log('Fetching chat history for user:', user.uid, 'and document:', currentFileName)
           const body = {
             uid: user.uid,
-            documentId: currentFileName
+            documentId: currentFileName,
           }
           const response = await axios.post('http://localhost:6060/chat-history', body)
           console.log(response.data)
-          // setMessages(response.data)
+          
+          // Transform the server response to the format expected by ResponseBox
+          const transformedMessages = response.data.map(message => ({
+            type: message.role === 'user' ? 'user' : 'server', 
+            text: message.message,
+          }))
+          
+          setMessages(transformedMessages)
         } catch (error) {
           console.error('Error fetching chat history:', error)
+        }
       }
-
-      }
-      fetchChatHistory();
-
+      fetchChatHistory()
     }
-  }, [currentFileName, user]); 
+  }, [currentFileName, user])
 
 
 
   const handleUserMessageSubmit = (userMessage) => {
     if (currentResponse.text.length > 0) {
       setMessages((prevMessages) => [...prevMessages, currentResponse])
+      setCurrentResponse({ type: 'server', text: [] }) // Reset currentResponse
     }
-    setCurrentResponse({ type: 'server', text: [] })
+    
+    // Add the user's message to the messages
     setMessages((prevMessages) => [
       ...prevMessages,
       { type: 'user', text: userMessage },

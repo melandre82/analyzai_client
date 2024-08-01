@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const ResponseBox = ({ messages, currentResponse }) => {
   return (
@@ -8,11 +8,13 @@ const ResponseBox = ({ messages, currentResponse }) => {
           {message.text}
         </div>
       ))}
-      <div className={`box-content ${currentResponse.type}`}>
-        {currentResponse.text}
-      </div>
+      {currentResponse.text.length > 0 && (
+        <div className={`box-content ${currentResponse.type}`}>
+          {currentResponse.text.join(' ')}
+        </div>
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default ResponseBox;
+export default ResponseBox
