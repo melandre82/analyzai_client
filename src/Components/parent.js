@@ -9,8 +9,7 @@ import { auth } from '../conf/firebase';
 const ParentComponent = () => {
   const [data, setData] = useState(null);
   const [textToBeHighlighted, setTextToBeHighlighted] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [currentResponse, setCurrentResponse] = useState({ type: 'server', text: [] });
+  const [messages, setMessages] = useState({}); // Messages keyed by document identifier
   const [currentFileName, setCurrentFileName] = useState(null);
   const [user, setUser] = useState(null);
 
@@ -18,7 +17,6 @@ const ParentComponent = () => {
 
   useEffect(() => {
     auth.onAuthStateChanged(setUser);
-    // add unsubscribe if user changes
   }, []);
 
   useEffect(() => {
@@ -30,17 +28,16 @@ const ParentComponent = () => {
         console.log('WebSocket Connected');
       });
 
-      socketRef.current.on('responseStart', () => {
-        console.log('responseStart event received');
-        setCurrentResponse({ type: 'server', text: [] });
-      });
-
       socketRef.current.on('newToken', (data) => {
         console.log('newToken event received:', data);
-        setCurrentResponse(prevResponse => ({
-          type: 'server',
-          text: [...prevResponse.text, data.token],
-        }));
+        const { currentFileName, token } = data;
+        setMessages(prevMessages => {
+          const messagesForFile = prevMessages[currentFileName] || [];
+          return {
+            ...prevMessages,
+            [currentFileName]: [...messagesForFile, { type: 'server', text: token }],
+          };
+        });
       });
     }
 
@@ -48,6 +45,8 @@ const ParentComponent = () => {
     return () => {
       if (socketRef.current) {
         console.log('Disconnecting WebSocket...');
+        socketRef.current.off('connect');
+        socketRef.current.off('newToken');
         socketRef.current.disconnect();
         socketRef.current = null;
       }
@@ -66,7 +65,10 @@ const ParentComponent = () => {
             type: message.role === 'user' ? 'user' : 'server',
             text: message.message,
           }));
-          setMessages(transformedMessages);
+          setMessages(prevMessages => ({
+            ...prevMessages,
+            [currentFileName]: transformedMessages,
+          }));
         } catch (error) {
           console.error('Error fetching chat history:', error);
         }
@@ -76,14 +78,13 @@ const ParentComponent = () => {
   }, [currentFileName, user]);
 
   const handleUserMessageSubmit = (userMessage) => {
-    if (currentResponse.text.length > 0) {
-      setMessages(prevMessages => [...prevMessages, currentResponse]);
-      setCurrentResponse({ type: 'server', text: [] });
-    }
-    setMessages(prevMessages => [
-      ...prevMessages,
-      { type: 'user', text: userMessage },
-    ]);
+    setMessages(prevMessages => {
+      const messagesForFile = prevMessages[currentFileName] || [];
+      return {
+        ...prevMessages,
+        [currentFileName]: [...messagesForFile, { type: 'user', text: userMessage }],
+      };
+    });
   };
 
   return (
@@ -97,8 +98,7 @@ const ParentComponent = () => {
       />
       <ResponseBox
         data={data}
-        messages={messages}
-        currentResponse={currentResponse}
+        messages={messages[currentFileName] || []} // Pass only messages for the current document
       />
       <UploadedFiles
         textToBeHighlighted={textToBeHighlighted}
