@@ -10,7 +10,7 @@ const ResponseBox = ({ messages, currentResponse }) => {
       ))}
       {currentResponse.text.length > 0 && (
         <div className={`box-content ${currentResponse.type}`}>
-          {currentResponse.text.join(' ')}
+          {currentResponse.text.join('')}
         </div>
       )}
     </div>

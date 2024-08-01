@@ -1,93 +1,90 @@
-import React, { useState, useEffect } from 'react'
-import QueryBox from './querybox'
-import ResponseBox from './responsebox'
-import UploadedFiles from './uploadedFiles.js'
-import { io } from 'socket.io-client'
-import axios from 'axios'
-import { auth } from '../conf/firebase'
-
+import React, { useState, useEffect, useRef } from 'react';
+import QueryBox from './querybox';
+import ResponseBox from './responsebox';
+import UploadedFiles from './uploadedFiles.js';
+import { io } from 'socket.io-client';
+import axios from 'axios';
+import { auth } from '../conf/firebase';
 
 const ParentComponent = () => {
-  const [data, setData] = useState(null)
-  const [textToBeHighlighted, setTextToBeHighlighted] = useState('')
-  const [messages, setMessages] = useState([])
-  const [currentResponse, setCurrentResponse] = useState({ text: '' })
-  const [currentFileName, setCurrentFileName] = useState(null)
-  const [user, setUser] = useState(null)
+  const [data, setData] = useState(null);
+  const [textToBeHighlighted, setTextToBeHighlighted] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [currentResponse, setCurrentResponse] = useState({ type: 'server', text: [] });
+  const [currentFileName, setCurrentFileName] = useState(null);
+  const [user, setUser] = useState(null);
+
+  const socketRef = useRef(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      // console.log('Auth state changed, user:', user) // Debugging log
-      setUser(user)
-    })
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe()
-  }, [])
-
-
-  // useEffect(() => {
-  //   console.log('parent ' + highlightText)
-  // }, [highlightText])
+    auth.onAuthStateChanged(setUser);
+    // add unsubscribe if user changes
+  }, []);
 
   useEffect(() => {
-    const socket = io(process.env.REACT_APP_SERVER_URL)
-  
-    socket.on('responseStart', () => {
-      setCurrentResponse({ type: 'server', text: [] })
-    })
-  
-    socket.on('newToken', (data) => {
-      setCurrentResponse((prevResponse) => ({
-        type: 'server', 
-        text: [...prevResponse.text, data.token],
-      }))
-    })
-  
-    return () => socket.disconnect()
-  }, [currentFileName])
-  // Fetch the chat history if the user or current file name changes
+    if (!socketRef.current) {
+      console.log('Establishing WebSocket connection...');
+      socketRef.current = io(process.env.REACT_APP_SERVER_URL);
+
+      socketRef.current.on('connect', () => {
+        console.log('WebSocket Connected');
+      });
+
+      socketRef.current.on('responseStart', () => {
+        console.log('responseStart event received');
+        setCurrentResponse({ type: 'server', text: [] });
+      });
+
+      socketRef.current.on('newToken', (data) => {
+        console.log('newToken event received:', data);
+        setCurrentResponse(prevResponse => ({
+          type: 'server',
+          text: [...prevResponse.text, data.token],
+        }));
+      });
+    }
+
+    // Cleanup function to disconnect and remove event listeners
+    return () => {
+      if (socketRef.current) {
+        console.log('Disconnecting WebSocket...');
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (currentFileName && user) {
       const fetchChatHistory = async () => {
         try {
-          const body = {
+          const response = await axios.post('http://localhost:6060/chat-history', {
             uid: user.uid,
             documentId: currentFileName,
-          }
-          const response = await axios.post('http://localhost:6060/chat-history', body)
-          console.log(response.data)
-          
-          // Transform the server response to the format expected by ResponseBox
+          });
           const transformedMessages = response.data.map(message => ({
-            type: message.role === 'user' ? 'user' : 'server', 
+            type: message.role === 'user' ? 'user' : 'server',
             text: message.message,
-          }))
-          
-          setMessages(transformedMessages)
+          }));
+          setMessages(transformedMessages);
         } catch (error) {
-          console.error('Error fetching chat history:', error)
+          console.error('Error fetching chat history:', error);
         }
-      }
-      fetchChatHistory()
+      };
+      fetchChatHistory();
     }
-  }, [currentFileName, user])
-
-
+  }, [currentFileName, user]);
 
   const handleUserMessageSubmit = (userMessage) => {
     if (currentResponse.text.length > 0) {
-      setMessages((prevMessages) => [...prevMessages, currentResponse])
-      setCurrentResponse({ type: 'server', text: [] }) // Reset currentResponse
+      setMessages(prevMessages => [...prevMessages, currentResponse]);
+      setCurrentResponse({ type: 'server', text: [] });
     }
-    
-    // Add the user's message to the messages
-    setMessages((prevMessages) => [
+    setMessages(prevMessages => [
       ...prevMessages,
       { type: 'user', text: userMessage },
-    ])
-  }
+    ]);
+  };
 
   return (
     <div>
@@ -103,11 +100,12 @@ const ParentComponent = () => {
         messages={messages}
         currentResponse={currentResponse}
       />
-      <UploadedFiles textToBeHighlighted={textToBeHighlighted} 
-      setCurrentFileName={setCurrentFileName}
+      <UploadedFiles
+        textToBeHighlighted={textToBeHighlighted}
+        setCurrentFileName={setCurrentFileName}
       />
     </div>
-  )
-}
+  );
+};
 
-export default ParentComponent
+export default ParentComponent;
