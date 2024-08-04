@@ -15,6 +15,11 @@ const UserAuth = () => {
   const [registerPassword, setRegisterPassword] = useState('')
   const [loginEmail, setLoginEmail] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
+  const [authMode, setAuthMode] = useState('landing')
+
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false)
+  const [showLoginPassword, setShowLoginPassword] = useState(false)
+
 
   const [user, setUser] = useState({})
 
@@ -23,7 +28,6 @@ const UserAuth = () => {
       setUser(currentUser)
     })
 
-    // Return a cleanup function to be run on component unmount
     return () => {
       unsubscribe()
     }
@@ -55,59 +59,102 @@ const UserAuth = () => {
     }
   }
 
-  const logout = async () => {
-    await signOut(auth)
+  const renderLandingCard = () => (
+    <div className='card'>
+      <h2>Welcome to AnalyzAI</h2>
+      <button className='button-field' onClick={() => setAuthMode('register')}>
+        Register
+      </button>
+      <button className='button-field' onClick={() => setAuthMode('login')}>
+        Login
+      </button>
+    </div>
+  )
+
+  const renderRegisterCard = () => (
+    <div className='card'>
+      <h3 className='title'>Register User</h3>
+      <input
+        className='input-field'
+        name='email'
+        type='email'  
+        placeholder='Email...'
+        autoComplete='email'
+        onChange={(event) => setRegisterEmail(event.target.value)}
+      />
+      <div className='password-container'>
+        <input
+          className='input-field'
+          name='new-password'
+          autoComplete='new-password'
+          type={showRegisterPassword ? 'text' : 'password'}
+          placeholder='Password...'
+          onChange={(event) => setRegisterPassword(event.target.value)}
+        />
+        <span
+          className='toggle-password'
+          onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+        >
+          {showRegisterPassword ? '🙈' : '👁️'}
+        </span>
+      </div>
+      <button className='button-field' onClick={register}>
+        Create User
+      </button>
+      <button className='button-field back-button' onClick={() => setAuthMode('landing')}>
+        Back
+      </button>
+    </div>
+  )
+
+  const renderLoginCard = () => (
+    <div className='card'>
+      <h3 className='title'>Login</h3>
+      <input
+        className='input-field'
+        placeholder='Email...'
+        name='email'
+        type='email'
+        onChange={(event) => setLoginEmail(event.target.value)}
+      />
+      <div className='password-container'>
+        <input
+          className='input-field'
+          name='current-password'
+          autoComplete='current-password'
+          type={showLoginPassword ? 'text' : 'password'}
+          placeholder='Password...'
+          onChange={(event) => setLoginPassword(event.target.value)}
+        />
+        <span
+          className='toggle-password'
+          onClick={() => setShowLoginPassword(!showLoginPassword)}
+        >
+          {showLoginPassword ? '🙈' : '👁️'}
+        </span>
+      </div>
+      <button className='button-field' onClick={login}>
+        Login
+      </button>
+      <button className='button-field back-button' onClick={() => setAuthMode('landing')}>
+        Back
+      </button>
+    </div>
+  )
+
+  if (user) {
+    return null
   }
 
-  return !user ? (
+  return (
     <div className='login-page'>
       <div className='login-card'>
-        <div>
-          <h3 className='title'> Register User </h3>
-          <input
-            className='input-field'
-            placeholder='Email...'
-            onChange={(event) => {
-              setRegisterEmail(event.target.value)
-            }}
-          />
-          <input
-            className='input-field'
-            placeholder='Password...'
-            onChange={(event) => {
-              setRegisterPassword(event.target.value)
-            }}
-          />
-
-          <button className='button-field' onClick={register}>
-            Create User
-          </button>
-        </div>
-
-        <div>
-          <h3 className='title'> Login </h3>
-          <input
-            className='input-field'
-            placeholder='Email...'
-            onChange={(event) => {
-              setLoginEmail(event.target.value)
-            }}
-          />
-          <input
-            className='input-field'
-            placeholder='Password...'
-            onChange={(event) => {
-              setLoginPassword(event.target.value)
-            }}
-          />
-
-          <button className='button-field' onClick={login}>
-            Login
-          </button>
-        </div>
+        {authMode === 'landing' && renderLandingCard()}
+        {authMode === 'register' && renderRegisterCard()}
+        {authMode === 'login' && renderLoginCard()}
       </div>
     </div>
-  ) : null
+  )
 }
 
 export default UserAuth
