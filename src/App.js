@@ -14,6 +14,7 @@ import UserAuth from './Components/user-auth'
 import ProtectedRoute from './Components/protected-route'
 import LogoutButton from './Components/logout'
 import Test from './Components/test'
+import UserMenu from './Components/userMenu'
 
 function App() {
   return (
@@ -21,7 +22,10 @@ function App() {
       <main>
         <UserAuth />
         <ProtectedRoute>
-          <LogoutButton />
+          {/* <LogoutButton /> */}
+          <header className="app-header">
+            <UserMenu />
+          </header>
           <UploadedFiles />
 
           <ToastContainer
