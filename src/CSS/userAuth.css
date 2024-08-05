@@ -38,7 +38,7 @@
   .password-container {
     position: relative;
     width: 100%;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
   }
   
   .password-container .input-field {
@@ -85,4 +85,9 @@
   .button-field:hover {
     filter: brightness(110%); 
 
+  }
+
+  .auth-error {
+    color: red;
+    margin: 0;
   }

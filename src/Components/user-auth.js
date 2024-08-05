@@ -16,12 +16,11 @@ const UserAuth = () => {
   const [loginEmail, setLoginEmail] = useState('')
   const [loginPassword, setLoginPassword] = useState('')
   const [authMode, setAuthMode] = useState('landing')
-
   const [showRegisterPassword, setShowRegisterPassword] = useState(false)
   const [showLoginPassword, setShowLoginPassword] = useState(false)
-
-
   const [user, setUser] = useState({})
+  const [authError, setAuthError] = useState('');
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -34,43 +33,74 @@ const UserAuth = () => {
   }, [])
 
   const register = async () => {
+    if (!registerEmail || !registerPassword) {
+      setAuthError('Please fill out both email and password fields.');
+      return;
+    }
     try {
       const user = await createUserWithEmailAndPassword(
         auth,
         registerEmail,
         registerPassword
-      )
-      console.log(user)
+      );
+      setAuthError('');
     } catch (error) {
-      console.log(error.message)
+      handleAuthError(error);
     }
-  }
-
+  };
+  
   const login = async () => {
+    if (!loginEmail || !loginPassword) {
+      setAuthError('Please fill out both email and password fields.');
+      return;
+    }
     try {
       const user = await signInWithEmailAndPassword(
         auth,
         loginEmail,
         loginPassword
-      )
-      console.log(user)
+      );
+      setAuthError('');
     } catch (error) {
-      console.log(error.message)
+      handleAuthError(error);
     }
-  }
+  };
+  
+  const handleAuthError = (error) => {
+    let errorMessage = '';
+    switch (error.code) {
+      case 'auth/invalid-email':
+        errorMessage = 'Invalid email format.';
+        break;
+      case 'auth/email-already-in-use':
+        errorMessage = 'Email is already in use.';
+        break;
+      case 'auth/weak-password':
+        errorMessage = 'Password needs to be at least 6 characters.';
+        break;
+      case 'auth/user-not-found':
+      case 'auth/wrong-password':
+        errorMessage = 'Invalid email or password.';
+        break;
+      default:
+        errorMessage = 'An unknown error occurred.';
+    }
+    setAuthError(errorMessage);
+  };
+  
 
   const renderLandingCard = () => (
     <div className='card'>
       <h2>Welcome to AnalyzAI</h2>
-      <button className='button-field' onClick={() => setAuthMode('register')}>
+      <button className='button-field' onClick={() => { setAuthMode('register'); setAuthError(''); }}>
         Register
       </button>
-      <button className='button-field' onClick={() => setAuthMode('login')}>
+      <button className='button-field' onClick={() => { setAuthMode('login'); setAuthError(''); }}>
         Login
       </button>
     </div>
-  )
-
+  );
+  
   const renderRegisterCard = () => (
     <div className='card'>
       <h3 className='title'>Register User</h3>
@@ -98,15 +128,16 @@ const UserAuth = () => {
           {showRegisterPassword ? '🙈' : '👁️'}
         </span>
       </div>
+      {authError && <p className='auth-error' >{authError}</p>}
       <button className='button-field' onClick={register}>
         Create User
       </button>
-      <button className='button-field back-button' onClick={() => setAuthMode('landing')}>
+      <button className='button-field back-button' onClick={() => { setAuthMode('landing'); setAuthError(''); }}>
         Back
       </button>
     </div>
-  )
-
+  );
+  
   const renderLoginCard = () => (
     <div className='card'>
       <h3 className='title'>Login</h3>
@@ -133,14 +164,15 @@ const UserAuth = () => {
           {showLoginPassword ? '🙈' : '👁️'}
         </span>
       </div>
+      {authError && <p className='auth-error' >{authError}</p>}
       <button className='button-field' onClick={login}>
         Login
       </button>
-      <button className='button-field back-button' onClick={() => setAuthMode('landing')}>
+      <button className='button-field back-button' onClick={() => { setAuthMode('landing'); setAuthError(''); }}>
         Back
       </button>
     </div>
-  )
+  );
 
   if (user) {
     return null
