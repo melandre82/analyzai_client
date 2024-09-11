@@ -3,7 +3,7 @@
   top: 1vh;
   right: 1vw;
   display: inline-block;
-  z-index: 1000000; 
+  z-index: 10; 
 }
 
 .user-icon {
