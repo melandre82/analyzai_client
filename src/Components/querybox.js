@@ -24,9 +24,6 @@ const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName, 
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
 
-  // useEffect(() => {
-  // }, [user])
-
   /**
    * Handles the query change event and sets the query.
    *
@@ -76,21 +73,38 @@ const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName, 
     }
   }
 
+  /**
+   * Handles the key down event to allow Shift + Enter for new lines.
+   *
+   * @param {React.KeyboardEvent} event The event of the key down.
+   */
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && event.shiftKey) {
+      event.preventDefault()
+      setQuery((prevQuery) => prevQuery + '\n')
+    }
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+      handleSubmit(event)
+    }
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <div id='textbox'>
-          <input
-            type='text'
+      <div id='textbox'>
+          <textarea
             placeholder='Enter a query'
             id='query-input'
             value={query}
             onChange={handleQueryChange}
+            onKeyDown={handleKeyDown}
+            rows={1}
           />
           <button
             type='submit'
             id='submit-button'
-            disabled={loading || !query}
+            disabled={loading || !query || !currentFileName}
             className={loading || !query ? 'loading' : ''}
           >
             {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : 'Submit'}

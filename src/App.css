@@ -57,7 +57,7 @@ body {
 
 #submit-button:not(.loading):hover {
   cursor: pointer;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  background-color: #0069d9;
 }
 
 
@@ -113,6 +113,11 @@ html, body, #root {
   
 }
 
+
+
+
+
+
 .box-content {
   max-width: 80%;
   padding: 10px;
@@ -132,9 +137,6 @@ html, body, #root {
   background-color: #007bff; 
   color: white;
 }
-
-
-
 
 .upload-container {
   display: flex;
@@ -186,11 +188,7 @@ html, body, #root {
   cursor: pointer;
 }
 
-.upload-button1:hover {
-  cursor: pointer;
 
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
 
 
 .file-icon {
@@ -199,6 +197,14 @@ html, body, #root {
 
 .hidden-input {
   display: none;
+}
+
+
+
+.upload-button1:hover {
+  cursor: pointer;
+
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .icon {
