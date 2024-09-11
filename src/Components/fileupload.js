@@ -6,24 +6,37 @@ import 'react-toastify/dist/ReactToastify.css'
 import localForage from 'localforage'
 import { auth } from '../conf/firebase'
 
+/**
+ * The FileUpload component.
+ *
+ * @returns {React.JSX.Element} The FileUpload component.
+ */
 const FileUpload = () => {
   const [file, setFile] = useState(null)
   const fileInputRef = useRef(null)
 
   const user = auth.currentUser
 
+  /**
+   * Handles the file change event and sets the selected file.
+   *
+   * @param {React.ChangeEvent} event The event.
+   */
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0]
     setFile(selectedFile)
   }
 
+  /**
+   * Handles the file upload.
+   *
+   */
   const handleUpload = async () => {
     if (!file) return
 
     const formData = new FormData()
     formData.append('file', file)
     formData.append('uid', user.uid)
-
 
     try {
       if (!file) {
@@ -35,17 +48,19 @@ const FileUpload = () => {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+            'Content-Type': 'multipart/form-data'
+          }
         }
       )
-
-      // console.log('uid: ' + formData.get('uid')) // Should log the uid
-      // console.log(formData.get('file'))
 
       toast.promise(responsePromise, {
         pending: 'Uploading file...',
         success: {
+          /**
+           * Renders the success message.
+           *
+           * @returns {string} The success message.
+           */
           render: () => {
             if (fileInputRef.current) {
               fileInputRef.current.value = ''
@@ -61,7 +76,7 @@ const FileUpload = () => {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
+          theme: 'dark'
         },
         error: {
           render: 'Failed to upload file.',
@@ -73,16 +88,20 @@ const FileUpload = () => {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: 'dark',
-        },
+          theme: 'dark'
+        }
       })
 
-      await localForage.setItem(file.name, file)
+      await localForage.setItem(file.name, file) // this is not needed anymore
     } catch (error) {
       console.error(error)
     }
   }
 
+  /**
+   * Handles the click event.
+   *
+   */
   const handleClick = () => {
     if (!file) {
       fileInputRef.current.click()
@@ -94,14 +113,16 @@ const FileUpload = () => {
   return (
     <div className='upload-container'>
       <div className='file-box'>
-        {file ? (
+        {file
+          ? (
           <>
             <span className='file-icon'>📄</span>
             <span>{file.name}</span>
           </>
-        ) : (
+            )
+          : (
           <span>No file chosen</span>
-        )}
+            )}
       </div>
       <button onClick={handleClick} className='upload-button1'>
         {file ? 'Upload' : 'Choose File'}

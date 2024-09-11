@@ -1,16 +1,24 @@
+/* eslint-disable */
 import { useState, useEffect, useCallback } from 'react'
+// eslint-disable-next-line
 import { pdfjs, Document, Page } from 'react-pdf'
 import 'react-pdf/dist/esm/Page/TextLayer.css'
-import { auth } from '../conf/firebase'
+import { auth, firestore } from '../conf/firebase'
+// eslint-disable-next-line
 import { onSnapshot, doc, collection } from 'firebase/firestore'
-import { firestore } from '../conf/firebase'
 
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css'
 import '../CSS/uploadedFiles.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`
 
-export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName }) {
+/**
+ *
+ * @param root0
+ * @param root0.textToBeHighlighted
+ * @param root0.setCurrentFileName
+ */
+export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName }) {
   const [files, setFiles] = useState([])
   const [currentFile, setCurrentFile] = useState(null)
   const [numPages, setNumPages] = useState(null)
@@ -23,79 +31,78 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
 
   const user = auth.currentUser
 
-  // Annotation
-
-
-
-  function highlightPattern(text, pattern) {
-    const escapedPattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); 
-    const regex = new RegExp(escapedPattern, 'gi');
-    return text.replace(regex, (value) => `<mark>${value}</mark>`);
-  }
-
-  const textRenderer = useCallback(
-    (textItem) => {
-
-      let result = textItem.str
-      // console.log('textItem.str: ' + textItem.str)
-      if (extractedPDFText && extractedPDFText.includes(textToBeHighlighted)) {
-        result = highlightPattern(textItem.str, textToBeHighlighted)
-        // console.log('text to highlight: ', textToBeHighlighted)
-        // console.log('text: , ' + extractedPDFText)
-      }
-
-      return result // return the output
-    },
-    [textToBeHighlighted, extractedPDFText]
-  )
-
-  //
-
   useEffect(() => {
     const userId = user.uid
     const filesRef = collection(firestore, 'users', userId, 'files')
     const unsubscribe = onSnapshot(filesRef, (snapshot) => {
       const newFiles = snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data(),
+        ...doc.data()
       }))
 
       setFiles(newFiles)
     })
 
-    // Clean up the subscription on unmount
     return () => unsubscribe()
   }, [])
 
-  function onDocumentLoadSuccess({ numPages }) {
+  /**
+   *
+   * @param root0
+   * @param root0.numPages
+   */
+  function onDocumentLoadSuccess ({ numPages }) {
     setNumPages(numPages)
   }
 
-  function changePage(offset) {
+  /**
+   *
+   * @param offset
+   */
+  function changePage (offset) {
     setPageNumber((prevPageNumber) => prevPageNumber + offset)
   }
 
-  function previousPage() {
+  /**
+   *
+   */
+  function previousPage () {
     changePage(-1)
   }
 
-  function nextPage() {
+  /**
+   *
+   */
+  function nextPage () {
     changePage(1)
   }
 
-  function changeScale(offset) {
+  /**
+   *
+   * @param offset
+   */
+  function changeScale (offset) {
     setScale((prevScale) => prevScale + offset)
   }
 
-  function decreaseScale() {
+  /**
+   *
+   */
+  function decreaseScale () {
     changeScale(-0.1)
   }
 
-  function increaseScale() {
+  /**
+   *
+   */
+  function increaseScale () {
     changeScale(0.1)
   }
 
-  function resetScale() {
+  /**
+   *
+   */
+  function resetScale () {
     setScale(1.5)
   }
 
@@ -103,10 +110,18 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
     setInputValue(pageNumber)
   }, [pageNumber])
 
+  /**
+   *
+   * @param e
+   */
   const handleInputChange = (e) => {
     setInputValue(e.target.value)
   }
 
+  /**
+   *
+   * @param e
+   */
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       const newPageNumber = parseInt(e.target.value)
@@ -114,28 +129,34 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
         setPageNumber(newPageNumber)
         e.target.blur()
       } else {
-        setInputValue(pageNumber) 
+        setInputValue(pageNumber)
       }
     }
   }
 
-  function formatText(texts) {
+  /**
+   *
+   * @param texts
+   */
+  function formatText (texts) {
     let textFinal = ''
     for (let i = 0; i < texts.items.length; i++) {
       textFinal += texts.items[i].str
     }
-    // console.log('extracted pdf text: ' + textFinal)
     setExtractedPDFText(textFinal)
   }
 
-  function resetViewerState() {
+  /**
+   * Resets the viewer state.
+   *
+   */
+  function resetViewerState () {
     setPageNumber(1)
     setScale(1.5)
     setRenderedPageNumber(null)
     setRenderedScale(null)
     setExtractedPDFText(null)
   }
-
 
   const isLoading = renderedPageNumber !== pageNumber || renderedScale !== scale
 
@@ -206,9 +227,9 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
                 key={file.id}
                 onClick={() => {
                   console.log('File clicked: ', file.id)
-                  setCurrentFile(file.downloadURL);
-                  setCurrentFileName(file.id);
-                  resetViewerState();
+                  setCurrentFile(file.downloadURL)
+                  setCurrentFileName(file.id)
+                  resetViewerState()
                 }}
               >
                 <img
@@ -227,10 +248,8 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
             <Document file={currentFile} onLoadSuccess={onDocumentLoadSuccess}>
               {isLoading && renderedPageNumber && renderedScale ? (
                 <Page
-                  key={`prev-${pageNumber}-${scale}-${textToBeHighlighted}`} 
+                  key={`prev-${pageNumber}-${scale}-${textToBeHighlighted}`}
                   className='prevPage'
-                  // renderTextLayer={true}
-                  customTextRenderer={textRenderer}
                   pageNumber={renderedPageNumber}
                   scale={renderedScale}
                   width={400}
@@ -238,10 +257,8 @@ export default function UploadedFiles({ textToBeHighlighted, setCurrentFileName 
                 />
               ) : null}
               <Page
-                key={`current-${pageNumber}-${scale}-${textToBeHighlighted}`} 
+                key={`current-${pageNumber}-${scale}-${textToBeHighlighted}`}
                 pageNumber={pageNumber}
-                // renderTextLayer={true}
-                customTextRenderer={textRenderer}
                 onRenderSuccess={() => {
                   setRenderedPageNumber(pageNumber)
                   setRenderedScale(scale)

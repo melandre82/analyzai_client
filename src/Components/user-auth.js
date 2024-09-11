@@ -1,15 +1,17 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../CSS/userAuth.css'
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
+  onAuthStateChanged
 } from 'firebase/auth'
 import { auth } from '../conf/firebase'
 
-// https://www.youtube.com/watch?v=9bXhf_TELP4
-
+/**
+ * The user authentication component. Source / inspo: https://www.youtube.com/watch?v=9bXhf_TELP4 .
+ *
+ * @returns {React.JSX.Element} The user authentication component.
+ */
 const UserAuth = () => {
   const [registerEmail, setRegisterEmail] = useState('')
   const [registerPassword, setRegisterPassword] = useState('')
@@ -19,8 +21,7 @@ const UserAuth = () => {
   const [showRegisterPassword, setShowRegisterPassword] = useState(false)
   const [showLoginPassword, setShowLoginPassword] = useState(false)
   const [user, setUser] = useState({})
-  const [authError, setAuthError] = useState('');
-
+  const [authError, setAuthError] = useState('')
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -32,82 +33,104 @@ const UserAuth = () => {
     }
   }, [])
 
+  /**
+   * Registers a new user.
+   *
+   */
   const register = async () => {
     if (!registerEmail || !registerPassword) {
-      setAuthError('Please fill out both email and password fields.');
-      return;
+      setAuthError('Please fill out both email and password fields.')
+      return
     }
     try {
-      const user = await createUserWithEmailAndPassword(
+      await createUserWithEmailAndPassword(
         auth,
         registerEmail,
         registerPassword
-      );
-      setAuthError('');
+      )
+      setAuthError('')
     } catch (error) {
-      handleAuthError(error);
+      handleAuthError(error)
     }
-  };
-  
+  }
+
+  /**
+   * Logs a user in.
+   *
+   */
   const login = async () => {
     if (!loginEmail || !loginPassword) {
-      setAuthError('Please fill out both email and password fields.');
-      return;
+      setAuthError('Please fill out both email and password fields.')
+      return
     }
     try {
-      const user = await signInWithEmailAndPassword(
+      await signInWithEmailAndPassword(
         auth,
         loginEmail,
         loginPassword
-      );
-      setAuthError('');
+      )
+      setAuthError('')
     } catch (error) {
-      handleAuthError(error);
+      handleAuthError(error)
     }
-  };
-  
+  }
+
+  /**
+   * Handles authentication errors.
+   *
+   * @param {Error} error The error.
+   */
   const handleAuthError = (error) => {
-    let errorMessage = '';
+    let errorMessage = ''
     switch (error.code) {
       case 'auth/invalid-email':
-        errorMessage = 'Invalid email format.';
-        break;
+        errorMessage = 'Invalid email format.'
+        break
       case 'auth/email-already-in-use':
-        errorMessage = 'Email is already in use.';
-        break;
+        errorMessage = 'Email is already in use.'
+        break
       case 'auth/weak-password':
-        errorMessage = 'Password needs to be at least 6 characters.';
-        break;
+        errorMessage = 'Password needs to be at least 6 characters.'
+        break
       case 'auth/user-not-found':
       case 'auth/wrong-password':
-        errorMessage = 'Invalid email or password.';
-        break;
+        errorMessage = 'Invalid email or password.'
+        break
       default:
-        errorMessage = 'An unknown error occurred.';
+        errorMessage = 'An unknown error occurred.'
     }
-    setAuthError(errorMessage);
-  };
-  
+    setAuthError(errorMessage)
+  }
 
+  /**
+   * Renders the landing card.
+   *
+   * @returns {React.JSX.Element} The landing card.
+   */
   const renderLandingCard = () => (
     <div className='card'>
       <h2>Welcome to AnalyzAI</h2>
-      <button className='button-field' onClick={() => { setAuthMode('register'); setAuthError(''); }}>
+      <button className='button-field' onClick={() => { setAuthMode('register'); setAuthError('') }}>
         Register
       </button>
-      <button className='button-field' onClick={() => { setAuthMode('login'); setAuthError(''); }}>
+      <button className='button-field' onClick={() => { setAuthMode('login'); setAuthError('') }}>
         Login
       </button>
     </div>
-  );
-  
+  )
+
+  /**
+   * Renders the register card.
+   *
+   * @returns {React.JSX.Element} The register card.
+   */
   const renderRegisterCard = () => (
     <div className='card'>
       <h3 className='title'>Register User</h3>
       <input
         className='input-field'
         name='email'
-        type='email'  
+        type='email'
         placeholder='Email...'
         autoComplete='email'
         onChange={(event) => setRegisterEmail(event.target.value)}
@@ -132,12 +155,17 @@ const UserAuth = () => {
       <button className='button-field' onClick={register}>
         Create User
       </button>
-      <button className='button-field back-button' onClick={() => { setAuthMode('landing'); setAuthError(''); }}>
+      <button className='button-field back-button' onClick={() => { setAuthMode('landing'); setAuthError('') }}>
         Back
       </button>
     </div>
-  );
-  
+  )
+
+  /**
+   * Renders the login card.
+   *
+   * @returns {React.JSX.Element} The login card.
+   */
   const renderLoginCard = () => (
     <div className='card'>
       <h3 className='title'>Login</h3>
@@ -168,11 +196,11 @@ const UserAuth = () => {
       <button className='button-field' onClick={login}>
         Login
       </button>
-      <button className='button-field back-button' onClick={() => { setAuthMode('landing'); setAuthError(''); }}>
+      <button className='button-field back-button' onClick={() => { setAuthMode('landing'); setAuthError('') }}>
         Back
       </button>
     </div>
-  );
+  )
 
   if (user) {
     return null
