@@ -68,7 +68,7 @@ const ParentComponent = () => {
        */
       const fetchChatHistory = async () => {
         try {
-          const response = await axios.post('http://localhost:6060/chat-history', { // fix env variable
+          const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/chat-history`, {
             uid: user.uid,
             documentId: currentFileName
           })

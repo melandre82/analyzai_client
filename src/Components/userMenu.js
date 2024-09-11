@@ -50,7 +50,7 @@ const UserMenu = () => {
     const user = auth.currentUser
     if (user && enteredEmail === user.email) {
       try {
-        await axios.post('http://localhost:6060/delete-user', { uid: user.uid })
+        await axios.post(`${process.env.REACT_APP_SERVER_URL}/delete-user`, { uid: user.uid })
         setIsModalVisible(false)
         await signOut(auth)
       } catch (error) {

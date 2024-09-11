@@ -56,7 +56,7 @@ const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName, 
         onSubmit(query)
 
         await axios
-          .post('http://localhost:6060/query', body) // fix env variable
+          .post(`${process.env.REACT_APP_SERVER_URL}/query`, body)
           .then((response) => {
             console.log(response.data)
             // setTextToBeHighlighted(response.data.sourceDocuments[0].pageContent)
