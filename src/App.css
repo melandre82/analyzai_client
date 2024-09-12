@@ -162,13 +162,27 @@ html, body, #root {
   font-size: 1rem;
   padding: 0.5rem;
   margin: 10px 0;
+  white-space: normal;
   text-align: left;
   width: 300px;
-  height: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  overflow: auto;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+
+
+li {
+  list-style-type: none;
+  white-space: normal; 
+  word-wrap: break-word;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+}
+
+.file-icon {
+  margin-right: 10px;
 }
 
 
@@ -191,14 +205,10 @@ html, body, #root {
 
 
 
-.file-icon {
-  margin-right: 10px;
-}
 
 .hidden-input {
   display: none;
 }
-
 
 
 .upload-button1:hover {
