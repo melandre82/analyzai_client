@@ -28,6 +28,8 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
   const [renderedScale, setRenderedScale] = useState(null)
   const [inputValue, setInputValue] = useState(pageNumber)
   const [extractedPDFText, setExtractedPDFText] = useState()
+  const [searchInput, setSearchInput] = useState('')
+
 
   const user = auth.currentUser
 
@@ -39,6 +41,13 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
         id: doc.id,
         ...doc.data()
       }))
+
+      // sort by last created first
+      newFiles.sort((a, b) => {
+        if (!a.creationDate) return 1; 
+        if (!b.creationDate) return -1;
+        return b.creationDate - a.creationDate
+      })
 
       setFiles(newFiles)
     })
@@ -158,6 +167,14 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
     setExtractedPDFText(null)
   }
 
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value.toLowerCase())
+  }
+
+  const filteredFiles = files.filter(file =>
+    file.fileName.toLowerCase().includes(searchInput)
+  )
+
   const isLoading = renderedPageNumber !== pageNumber || renderedScale !== scale
 
   return (
@@ -168,7 +185,8 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
             <input
               type='text'
               value={inputValue}
-              onClick={(event) => event.target.select()}
+              onClick={(event) => {console.log(event) 
+                event.target.select()}}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
             />
@@ -206,7 +224,10 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
             min='0.5'
             max='5'
             value={scale}
-            onChange={(event) => setScale(Number(event.target.value))}
+            onChange={(event) => {  console.log('Event:', event);
+              console.log('Event Target Value:', event.target.value);
+              setScale(Number(event.target.value));
+            }}
             step='0.2'
           />{' '}
           <button
@@ -220,27 +241,37 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
         </div>
       </div>
       <div className='uploaded-files-container'>
-        <div className='file-bar'>
+        <div className='file-bar-container'>
+        <input
+            type="text"
+            placeholder="Search"
+            onChange={handleSearchChange}
+            className="search-field"
+          />
+
+          <div className='file-bar'>
+       
           <ul className='file-list'>
-            {files.map((file) => (
-              <li
-                key={file.id}
-                onClick={() => {
-                  console.log('File clicked: ', file.id)
-                  setCurrentFile(file.downloadURL)
-                  setCurrentFileName(file.id)
-                  resetViewerState()
-                }}
-              >
-                <img
-                  className='icon'
-                  src={require('../icons/icons8-pdf-96.png')}
-                  alt='Icon'
-                />{' '}
-                {file.fileName}
-              </li>
-            ))}
-          </ul>
+              {filteredFiles.map((file) => (
+                <li
+                  key={file.id}
+                  onClick={() => {
+                    console.log('File clicked: ', file.id)
+                    setCurrentFile(file.downloadURL)
+                    setCurrentFileName(file.id)
+                    resetViewerState()
+                  }}
+                >
+                  <img
+                    className='icon'
+                    src={require('../icons/icons8-pdf-96.png')}
+                    alt='Icon'
+                  />{' '}
+                  {file.fileName}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {currentFile && (

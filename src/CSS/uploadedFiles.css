@@ -1,11 +1,61 @@
+.uploaded-files-container {
+  top: 50%;
+  left: 0.5vw;
+  height: 80vh;
+  display: flex;
+  z-index: 1000;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #40414e;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  margin-right: 10px;
+
+  width: 43%;
+}
+
+.box-container,
+.uploaded-files-container {
+  height: 80vh;
+
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #40414e;
+}
+
+.uploaded-files-container {
+  z-index: 1000;
+  background-color: #40414e;
+}
+
 .file-bar {
-  height: 100%;
+  height: 75vh;
   width: 10vw;
   overflow-y: scroll;
   overflow-x: scroll;
   border-radius: 10px;
   background-color: #292a32;
   margin-right: 10px;
+}
+
+
+.search-field {
+  width: 10vw;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  margin-bottom: 1px;
+  border-radius: 5px;
+  color: white;
+  background-color: #292a32;
+  overflow-y: auto;
+  border: none;
+}
+
+.search-field:focus {
+  outline: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .file-list {
@@ -24,12 +74,15 @@
 }
 
 .file-list li {
-  width: auto, fit-content;
-  cursor: pointer;
+  
+  list-style-type: none;
+  white-space: normal; 
+  word-wrap: break-word;
   background-color: #3d3e49;
   padding: 3px;
   margin-bottom: 5px;
   border-radius: 5px;
+  user-select: none;
 }
 
 li img {
@@ -40,6 +93,7 @@ li img {
 
 .file-list li:hover {
   background-color: #2f3039;
+  cursor: pointer;
 }
 
 .pdf-container {
@@ -174,34 +228,3 @@ li img {
 
 
 
-.uploaded-files-container {
-  top: 50%;
-  left: 0.5vw;
-  height: 80vh;
-  display: flex;
-  z-index: 1000;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #40414e;
-  border-radius: 10px;
-  padding: 10px;
-  color: white;
-  margin-right: 10px;
-
-  width: 43%;
-}
-
-.box-container,
-.uploaded-files-container {
-  height: 80vh;
-
-  padding: 10px;
-  border-radius: 10px;
-  background-color: #40414e;
-}
-
-.uploaded-files-container {
-  z-index: 1000;
-  background-color: #40414e;
-}

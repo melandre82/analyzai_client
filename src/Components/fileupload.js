@@ -3,7 +3,7 @@ import axios from 'axios'
 import '../App.css'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import localForage from 'localforage'
+// import localForage from 'localforage'
 import { auth } from '../conf/firebase'
 
 /**
@@ -92,7 +92,7 @@ const FileUpload = () => {
         }
       })
 
-      await localForage.setItem(file.name, file) // this is not needed anymore
+      // await localForage.setItem(file.name, file) // this is not needed anymore
     } catch (error) {
       console.error(error)
     }

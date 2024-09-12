@@ -8,6 +8,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import socket from '../sockets/socket'
 // eslint-disable-next-line
 import { auth } from '../conf/firebase'
+import '../CSS/querybox.css'
 
 /**
  * The QueryBox component.
