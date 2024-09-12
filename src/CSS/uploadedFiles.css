@@ -95,7 +95,7 @@ li img {
 }
 
 .file-list li:hover {
-  background-color: #2f3039;
+  background-color: #565663;
   cursor: pointer;
 }
 
@@ -117,117 +117,6 @@ li img {
   background-color: white;
 }
 
-.navigation-box:focus {
-  outline: none;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-
-.navigation-box {
-  width: 27%;
-  position: fixed;
-  bottom: 1vh;
-  left: 3%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background-color: red;
-}
-
-
-.navigation {
-  z-index: 1100;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed; 
-  bottom: 1vh; 
-  left: 3%; 
-  width: 27%; 
-  height: 40px; 
-  transform: translateX(0); 
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 1px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  font-size: 14px;
-  color: white;
-  background-color: #40414e;
-  overflow-y: hidden;
-  overflow-x: scroll;
-  border-radius: 10px;
-  transition: box-shadow 0.2s ease-in-out;
-  box-sizing: border-box;
-}
-
-.navigation input {
-  margin: 0;
-}
-
-.page-number {
-  font-size: 14px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  resize: none;
-  background-color: #007bff;
-  border-radius: 10px;
-  margin: 0;
-  overflow-x: none;
-  white-space: nowrap;  
-  width: 80px;  
-  overflow-x: none;
-  overflow-y: none;
-  height: 30px;
-  padding-left: 2px;
-  padding-right: 2px;
-  padding-right: 10px;
-}
-
-.page-number p {
-  top: 50%;
-  
-  padding: 5px;
-
-  margin: 0;
-}
-
-.page-number input {
-  width: 30px;
-  background-color: #40414e;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  outline: none;
-  text-align: center;
-  margin-left: 2px;
-  margin-right: 3px;
-}
-
-
-.navigation button {
-  flex-grow: 0.1;
-  background-color: #007bff;
-  color: white;
-  height: 30px;
-  width: 30px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 2px;
-}
-
-.navigation button.reset {
-  width: 50px;
-}
-
-.navigation button:hover {
-  background-color: #0069d9;
-}
 
 
 

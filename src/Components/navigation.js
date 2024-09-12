@@ -1,4 +1,5 @@
 import React from 'react'
+import '../CSS/navigation.css'
 
 /**
  * Navigation component for PDF viewer.

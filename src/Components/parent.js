@@ -30,10 +30,6 @@ const ParentComponent = () => {
   const socketRef = useRef(null)
 
   useEffect(() => {
-    console.log('ParentComponent - setInputValue initialized:', setInputValue)
-  }, [setInputValue])
-
-  useEffect(() => {
     auth.onAuthStateChanged(setUser)
   }, [])
 
@@ -225,13 +221,6 @@ const ParentComponent = () => {
       />
 
       <footer className='app-footer'>
-        <QueryBox
-          setData={setData}
-          setTextToBeHighlighted={setTextToBeHighlighted}
-          onSubmit={handleUserMessageSubmit}
-          currentFileName={currentFileName}
-          user={user}
-        />
         <Navigation
           numPages={numPages}
           pageNumber={pageNumber}
@@ -246,6 +235,13 @@ const ParentComponent = () => {
           handleInputChange={handleInputChange}
           handleKeyPress={handleKeyPress}
           setScale={setScale}
+        />
+         <QueryBox
+          setData={setData}
+          setTextToBeHighlighted={setTextToBeHighlighted}
+          onSubmit={handleUserMessageSubmit}
+          currentFileName={currentFileName}
+          user={user}
         />
       </footer>
     </div>
