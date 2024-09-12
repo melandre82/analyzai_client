@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
+// eslint-disable-next-line
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 /**
  * The response box component.
@@ -68,7 +71,15 @@ const ResponseBox = ({ messages }) => {
     <div className='box-container' ref={boxRef}>
       {aggregatedMessages.map((message, index) => (
         <div key={index} className={`box-content ${message.type}`}>
-          {message.text}
+             {message.type === 'server'
+               ? (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {message.text}
+            </ReactMarkdown>
+                 )
+               : (
+                   message.text
+                 )}
         </div>
       ))}
     </div>
