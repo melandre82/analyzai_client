@@ -3,12 +3,16 @@
     display: flex;
     justify-content: center; 
     align-items: center;
+    gap: 0.5rem;
+    width: 33vw;
   }
   
   
   
   .file-box {
     display: flex;
+    box-sizing: border-box;
+    height: 40px;
     justify-content: flex-start;
     align-items: center;
     border-radius: 10px;
@@ -22,12 +26,23 @@
     text-align: left;
     width: 300px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   
+  .file-box span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-grow: 1;
+  }
+
   
   
   .file-icon {
+    flex-shrink: 0; 
+   
     margin-right: 10px;
   }
   
@@ -38,9 +53,10 @@
     background-color: #007bff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    box-sizing: border-box;
+    height: 40px;
     border: none;
     color: #fff;
-   height: 40px;
     font-size: 1rem;
     padding: 0.5rem;
     margin: 10px 0;
