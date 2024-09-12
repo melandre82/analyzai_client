@@ -39,10 +39,12 @@ function App () {
         <UserAuth />
         <ProtectedRoute>
           <header className="app-header">
-            <UserMenu />
+            <FileUpload />
+            <div className="user-menu-container">
+              <UserMenu />
+            </div>
           </header>
           <UploadedFiles />
-
           <ToastContainer
             position='top-right'
             autoClose={3000}
@@ -55,7 +57,7 @@ function App () {
             pauseOnHover
             theme='dark'
           />
-          <FileUpload />
+
           <ParentComponent />
         </ProtectedRoute>
       </main>

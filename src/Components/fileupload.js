@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 // import localForage from 'localforage'
 import { auth } from '../conf/firebase'
+import '../CSS/fileUpload.css'
 
 /**
  * The FileUpload component.

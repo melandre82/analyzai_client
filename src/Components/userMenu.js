@@ -116,8 +116,8 @@ const UserMenu = () => {
             />
              {errorMessage && <p className='auth-error' >{errorMessage}</p>}
 
-            <button class='delete-button' onClick={confirmDeleteAccount}>Confirm</button>
-            <button class='cancel-button' onClick={handleCancel}>Cancel</button>
+            <button className='delete-button' onClick={confirmDeleteAccount}>Confirm</button>
+            <button className='cancel-button' onClick={handleCancel}>Cancel</button>
           </div>
         </div>
       )}

@@ -2,17 +2,27 @@ body {
   background-color: #343540;
 }
 
-
-
-
-
-
-
-
-#submit-button:not(.loading):hover {
-  cursor: pointer;
-  background-color: #0069d9;
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000000000;
+  height: 72px;
 }
+
+
+
+
+
+
+
+
+
 
 
 form div {
@@ -91,76 +101,3 @@ html, body, #root {
   background-color: #007bff; 
   color: white;
 }
-
-.upload-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 1vh;
-  left: 50%;
-  transform: translateX(-50%);
-  gap: 0.5rem;
-}
-
-
-
-.file-box {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border-radius: 10px;
-  background-color: #40414e;
-  color: white;
-  max-height: 70vh;
-  font-size: 1rem;
-  padding: 0.5rem;
-  margin: 10px 0;
-  white-space: normal;
-  text-align: left;
-  width: 300px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow: none;
-}
-
-
-
-.file-icon {
-  margin-right: 10px;
-}
-
-
-
-
-.upload-button1 {
-  background-color: #007bff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  border: none;
-  color: #fff;
- height: 40px;
-  font-size: 1rem;
-  padding: 0.5rem;
-  margin: 10px 0;
-  text-align: left;
-  cursor: pointer;
-}
-
-
-
-
-
-.hidden-input {
-  display: none;
-}
-
-
-.upload-button1:hover {
-  cursor: pointer;
-
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-.icon {
-width: 20px;
-} 
