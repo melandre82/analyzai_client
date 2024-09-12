@@ -39,7 +39,8 @@ export default function UploadedFiles ({
   const [currentFile, setCurrentFile] = useState(null)
   const [renderedPageNumber, setRenderedPageNumber] = useState(null)
   const [renderedScale, setRenderedScale] = useState(null)
-  const [setExtractedPDFText] = useState()
+  // eslint-disable-next-line
+  const [extractedPDFText, setExtractedPDFText] = useState()
   const [searchInput, setSearchInput] = useState('')
 
   const user = auth.currentUser
