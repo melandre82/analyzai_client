@@ -19,7 +19,6 @@ const UserMenu = () => {
 
   useEffect(() => {
     const user = auth.currentUser
-    console.log(user)
 
     if (user) {
       setUsername(user.email || 'User')

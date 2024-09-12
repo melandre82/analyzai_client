@@ -1,37 +1,54 @@
-/* eslint-disable */
-import { useState, useEffect, useCallback } from 'react'
+// eslint-disable-next-line
+import React, { useState, useEffect, useRef } from 'react'
 // eslint-disable-next-line
 import { pdfjs, Document, Page } from 'react-pdf'
 import 'react-pdf/dist/esm/Page/TextLayer.css'
 import { auth, firestore } from '../conf/firebase'
-// eslint-disable-next-line
-import { onSnapshot, doc, collection } from 'firebase/firestore'
-
+import { onSnapshot, collection } from 'firebase/firestore'
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css'
 import '../CSS/uploadedFiles.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.js`
 
 /**
+ * The UploadedFiles component.
  *
- * @param root0
- * @param root0.textToBeHighlighted
- * @param root0.setCurrentFileName
+ * @param {React.ComponentProps} root0 The component props.
+ * @param {string} root0.textToBeHighlighted The text to be highlighted.
+ * @param {Function} root0.setCurrentFileName The setCurrentFileName function.
+ * @param {Function} root0.setNumPages The setNumPages function.
+ * @param {number} root0.pageNumber The page number.
+ * @param {Function} root0.setPageNumber The setPageNumber function.
+ * @param {number} root0.scale The scale.
+ * @param {Function} root0.setScale The setScale function.
+ * @param {Function} root0.setInputValue The setInputValue function.
+ * @returns {React.JSX.Element} The UploadedFiles component.
  */
-export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName }) {
+export default function UploadedFiles ({
+  textToBeHighlighted,
+  setCurrentFileName,
+  setNumPages,
+  pageNumber,
+  setPageNumber,
+  scale,
+  setScale,
+  setInputValue
+
+}) {
   const [files, setFiles] = useState([])
   const [currentFile, setCurrentFile] = useState(null)
-  const [numPages, setNumPages] = useState(null)
-  const [pageNumber, setPageNumber] = useState(1)
-  const [scale, setScale] = useState(1.5)
   const [renderedPageNumber, setRenderedPageNumber] = useState(null)
   const [renderedScale, setRenderedScale] = useState(null)
-  const [inputValue, setInputValue] = useState(pageNumber)
-  const [extractedPDFText, setExtractedPDFText] = useState()
+  const [setExtractedPDFText] = useState()
   const [searchInput, setSearchInput] = useState('')
 
-
   const user = auth.currentUser
+
+  useEffect(() => {
+    if (typeof setInputValue === 'function') {
+      setInputValue(pageNumber)
+    }
+  }, [pageNumber, setInputValue])
 
   useEffect(() => {
     const userId = user.uid
@@ -44,8 +61,8 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
 
       // sort by last created first
       newFiles.sort((a, b) => {
-        if (!a.creationDate) return 1; 
-        if (!b.creationDate) return -1;
+        if (!a.creationDate) return 1
+        if (!b.creationDate) return -1
         return b.creationDate - a.creationDate
       })
 
@@ -56,96 +73,19 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
   }, [])
 
   /**
+   * Handles the document load success event.
    *
-   * @param root0
-   * @param root0.numPages
+   * @param {object} root0 The parameter object.
+   * @param {number} root0.numPages The number of pages in the document.
    */
   function onDocumentLoadSuccess ({ numPages }) {
     setNumPages(numPages)
   }
 
   /**
+   * Formats the text extracted from the PDF.
    *
-   * @param offset
-   */
-  function changePage (offset) {
-    setPageNumber((prevPageNumber) => prevPageNumber + offset)
-  }
-
-  /**
-   *
-   */
-  function previousPage () {
-    changePage(-1)
-  }
-
-  /**
-   *
-   */
-  function nextPage () {
-    changePage(1)
-  }
-
-  /**
-   *
-   * @param offset
-   */
-  function changeScale (offset) {
-    setScale((prevScale) => prevScale + offset)
-  }
-
-  /**
-   *
-   */
-  function decreaseScale () {
-    changeScale(-0.1)
-  }
-
-  /**
-   *
-   */
-  function increaseScale () {
-    changeScale(0.1)
-  }
-
-  /**
-   *
-   */
-  function resetScale () {
-    setScale(1.5)
-  }
-
-  useEffect(() => {
-    setInputValue(pageNumber)
-  }, [pageNumber])
-
-  /**
-   *
-   * @param e
-   */
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value)
-  }
-
-  /**
-   *
-   * @param e
-   */
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      const newPageNumber = parseInt(e.target.value)
-      if (newPageNumber >= 1 && newPageNumber <= numPages) {
-        setPageNumber(newPageNumber)
-        e.target.blur()
-      } else {
-        setInputValue(pageNumber)
-      }
-    }
-  }
-
-  /**
-   *
-   * @param texts
+   * @param {object} texts The text items extracted from the PDF.
    */
   function formatText (texts) {
     let textFinal = ''
@@ -167,6 +107,11 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
     setExtractedPDFText(null)
   }
 
+  /**
+   * Handles the search change event.
+   *
+   * @param {Event} e  The event of the search change.
+   */
   const handleSearchChange = (e) => {
     setSearchInput(e.target.value.toLowerCase())
   }
@@ -179,84 +124,20 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
 
   return (
     <div>
-      <div className='navigation-box'>
-        <div className='navigation'>
-          <div className='page-number'>
-            <input
-              type='text'
-              value={inputValue}
-              onClick={(event) => {console.log(event) 
-                event.target.select()}}
-              onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
-            />
-            <span> / {numPages || '-'}</span>
-          </div>
-          <button
-            type='button'
-            className='previous'
-            disabled={pageNumber <= 1}
-            onClick={previousPage}
-          >
-            &lt;
-          </button>{' '}
-          <button
-            type='button'
-            className='next'
-            disabled={pageNumber >= numPages}
-            onClick={nextPage}
-          >
-            &gt;
-          </button>
-          <button type='button' className='reset' onClick={resetScale}>
-            {Math.round((scale * 100) / 1.5)}%
-          </button>
-          <button
-            type='button'
-            className='minus'
-            disabled={scale <= 0.5}
-            onClick={decreaseScale}
-          >
-            -
-          </button>{' '}
-          <input
-            type='range'
-            min='0.5'
-            max='5'
-            value={scale}
-            onChange={(event) => {  console.log('Event:', event);
-              console.log('Event Target Value:', event.target.value);
-              setScale(Number(event.target.value));
-            }}
-            step='0.2'
-          />{' '}
-          <button
-            type='button'
-            className='plus'
-            disabled={scale >= 5}
-            onClick={increaseScale}
-          >
-            +
-          </button>
-        </div>
-      </div>
       <div className='uploaded-files-container'>
         <div className='file-bar-container'>
-        <input
+          <input
             type="text"
             placeholder="Search"
             onChange={handleSearchChange}
             className="search-field"
           />
-
           <div className='file-bar'>
-       
-          <ul className='file-list'>
+            <ul className='file-list'>
               {filteredFiles.map((file) => (
                 <li
                   key={file.id}
                   onClick={() => {
-                    console.log('File clicked: ', file.id)
                     setCurrentFile(file.downloadURL)
                     setCurrentFileName(file.id)
                     resetViewerState()
@@ -277,7 +158,8 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
         {currentFile && (
           <div className='pdf-viewer'>
             <Document file={currentFile} onLoadSuccess={onDocumentLoadSuccess}>
-              {isLoading && renderedPageNumber && renderedScale ? (
+              {isLoading && renderedPageNumber && renderedScale
+                ? (
                 <Page
                   key={`prev-${pageNumber}-${scale}-${textToBeHighlighted}`}
                   className='prevPage'
@@ -286,7 +168,8 @@ export default function UploadedFiles ({ textToBeHighlighted, setCurrentFileName
                   width={400}
                   onGetTextSuccess={(text) => formatText(text)}
                 />
-              ) : null}
+                  )
+                : null}
               <Page
                 key={`current-${pageNumber}-${scale}-${textToBeHighlighted}`}
                 pageNumber={pageNumber}
