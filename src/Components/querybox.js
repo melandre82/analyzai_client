@@ -93,24 +93,24 @@ const QueryBox = ({ onSubmit, setData, setTextToBeHighlighted, currentFileName, 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-      <div id='textbox'>
-          <textarea
-            placeholder='Enter a query'
-            id='query-input'
-            value={query}
-            onChange={handleQueryChange}
-            onKeyDown={handleKeyDown}
-            rows={1}
-          />
-          <button
-            type='submit'
-            id='submit-button'
-            disabled={loading || !query || !currentFileName}
-            className={loading || !query ? 'loading' : ''}
-          >
-            {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : 'Submit'}
-          </button>
-        </div>
+      <div className='query-container'>
+        <textarea
+          placeholder='Enter a query'
+          id='query-input'
+          value={query}
+          onChange={handleQueryChange}
+          onKeyDown={handleKeyDown}
+          rows={1}
+        />
+        <button
+          type='submit'
+          id='submit-button'
+          disabled={loading || !query || !currentFileName}
+          className={loading || !query ? 'loading' : ''}
+        >
+          {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : 'Submit'}
+        </button>
+      </div>
       </form>
     </div>
   )

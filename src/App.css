@@ -12,24 +12,24 @@ body {
   left: 0;
   right: 0;
   z-index: 10000000000;
-  height: 72px;
+  height: 36px;
+  background-color: #343540;
 }
 
-
-
-
-
-
-
-
-
-
-
-form div {
+.app-footer {
   display: flex;
-  flex-direction: column;
-  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000000000;
+  height: 36px;
+  background-color: #343540;
 }
+
 
 label {
   margin-top: 1rem;

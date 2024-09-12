@@ -38,9 +38,9 @@ function App () {
       <main>
         <UserAuth />
         <ProtectedRoute>
-          <header className="app-header">
+          <header className='app-header'>
             <FileUpload />
-            <div className="user-menu-container">
+            <div className='user-menu-container'>
               <UserMenu />
             </div>
           </header>
@@ -57,7 +57,6 @@ function App () {
             pauseOnHover
             theme='dark'
           />
-
           <ParentComponent />
         </ProtectedRoute>
       </main>

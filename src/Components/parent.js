@@ -106,21 +106,26 @@ const ParentComponent = () => {
 
   return (
     <div>
-      <QueryBox
-        setData={setData}
-        setTextToBeHighlighted={setTextToBeHighlighted}
-        onSubmit={handleUserMessageSubmit}
-        currentFileName={currentFileName}
-        user={user}
-      />
-      <ResponseBox
-        data={data}
-        messages={messages[currentFileName] || []}
-      />
+
       <UploadedFiles
         textToBeHighlighted={textToBeHighlighted}
         setCurrentFileName={setCurrentFileName}
       />
+
+      <ResponseBox
+        data={data}
+        messages={messages[currentFileName] || []}
+      />
+
+      <footer className='app-footer'>
+        <QueryBox
+          setData={setData}
+          setTextToBeHighlighted={setTextToBeHighlighted}
+          onSubmit={handleUserMessageSubmit}
+          currentFileName={currentFileName}
+          user={user}
+        />
+      </footer>
     </div>
   )
 }
