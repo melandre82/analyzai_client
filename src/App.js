@@ -43,9 +43,7 @@ function App () {
             <div className='user-menu-container'>
               <UserMenu />
             </div>
-          </header>
-          <UploadedFiles />
-          <ToastContainer
+            <ToastContainer
             position='top-right'
             autoClose={3000}
             hideProgressBar
@@ -57,6 +55,9 @@ function App () {
             pauseOnHover
             theme='dark'
           />
+          </header>
+          <UploadedFiles />
+
           <ParentComponent />
         </ProtectedRoute>
       </main>
